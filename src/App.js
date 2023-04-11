@@ -13,14 +13,18 @@ function App() {
   const synth = window.speechSynthesis;
 
   const handleSpeak = async (type) => {
+    debugger
     await setDisableButton(true);
-    const voices = await synth.getVoices();
-    console.log(voices);
-    const voice = voices.find(
-      (voice) => voice.voiceURI === "Microsoft David - English (United States)"
-    );
     const question = askQuestion(type);
     const utterance = new SpeechSynthesisUtterance(question);
+    const voices = await synth.getVoices();
+    if(voices.length){
+      const voice = voices.find(
+        (voice) => voice.voiceURI === "Microsoft David - English (United States)"
+      );
+    utterance.voice = voice;
+      
+    }
     utterance.onend = () => {
       playerRef.current?.stop();
       setDisableButton(false);
@@ -30,7 +34,6 @@ function App() {
     };
     await setQuestion(question);
     utterance.lang = "en-US";
-    utterance.voice = voice;
     synth.speak(utterance);
   };
 
