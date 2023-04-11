@@ -1,6 +1,6 @@
 import "./App.css";
 import "@lottiefiles/lottie-player";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { askQuestion } from "./questionsReading/questionsAsking";
 
 function App() {
@@ -8,6 +8,7 @@ function App() {
 
   const [question, setQuestion] = useState("");
   const [disableButton, setDisableButton] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const synth = window.speechSynthesis;
 
@@ -28,6 +29,17 @@ function App() {
     synth.speak(utterance);
   };
 
+  const handleResize = () => {
+    setScreenWidth(window.innerWidth);
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className="App">
       <lottie-player
@@ -36,7 +48,10 @@ function App() {
         loop
         mode="normal"
         src="https://assets6.lottiefiles.com/private_files/lf30_emntxv1p.json"
-        style={{ width: "300px" }}
+        style={{
+          width: screenWidth < 768 ? "100%" : "300px",
+          "margin-left": screenWidth < 768 ? "5%" : 0,
+        }}
       ></lottie-player>
 
       <div className="actions">
@@ -58,10 +73,7 @@ function App() {
         >
           Personal
         </button>
-        <button
-          disabled={disableButton}
-          onClick={() => handleSpeak("random")}
-        >
+        <button disabled={disableButton} onClick={() => handleSpeak("random")}>
           Random
         </button>
       </div>

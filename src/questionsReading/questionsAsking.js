@@ -12,9 +12,9 @@ const mappingQuestions = (questions) =>
     .split(/\s\d+\s/)
     .map((question) =>
       question
+      .replace(/Q[0-9]+|“/ig, "")
         .replace("\t", "")
         .replace("\n", "")
-        .replace(/Q[0-9]+|“/g, "")
         .replace(/[…]|-/g, " ")
     )
     .filter((question) => /[a-z]/gi.test(question));
