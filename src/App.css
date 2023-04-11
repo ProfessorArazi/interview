@@ -31,7 +31,7 @@
   cursor: pointer;
 }
 
-.actions button:hover{
+.actions button:hover {
   background-color: rgb(222, 220, 220);
 }
 
@@ -43,5 +43,8 @@
 @media (max-width: 768px) {
   .actions {
     width: 70%;
+  }
+  .actions button:hover {
+    background-color: #fff;
   }
 }
