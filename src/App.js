@@ -9,22 +9,16 @@ function App() {
   const [question, setQuestion] = useState("");
   const [disableButton, setDisableButton] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [isLoading, setIsLoading] = useState(false);
 
   const synth = window.speechSynthesis;
 
   const handleSpeak = async (type) => {
-    const beforeQuestion = performance.now();
+    setIsLoading(true);
+    setDisableButton(true);
     const question = askQuestion(type);
-    const afterQuestion = performance.now();
-    console.log("question", afterQuestion - beforeQuestion);
-    const beforeUtterance = performance.now();
     const utterance = await new SpeechSynthesisUtterance(question);
-    const afterUtterance = performance.now();
-    console.log("utterance", afterUtterance - beforeUtterance);
-    const beforeVoices = performance.now();
     const voices = await synth.getVoices();
-    const afterVoices = performance.now();
-    console.log("voices", afterVoices - beforeVoices);
     if (voices.length) {
       const voice = voices.find(
         (voice) =>
@@ -40,14 +34,9 @@ function App() {
       playerRef.current?.play();
     };
     utterance.lang = "en-US";
-    const beforeSpeak = performance.now();
     synth.speak(utterance);
-    const afterSpeak = performance.now();
-    console.log("speak", afterSpeak - beforeSpeak);
-    const beforeSetQuestion = performance.now();
+    setIsLoading(false);
     setQuestion(question);
-    const afterSetQuestion = performance.now();
-    console.log("setQuestion", afterSetQuestion - beforeSetQuestion);
   };
 
   const handleResize = () => {
@@ -82,29 +71,36 @@ function App() {
         }
       ></lottie-player>
 
-      <div className="actions">
-        <button disabled={disableButton} onClick={() => handleSpeak("react")}>
-          React
-        </button>
-        <button
-          disabled={disableButton}
-          onClick={() => handleSpeak("reactNative")}
-        >
-          React Native
-        </button>
-        <button disabled={disableButton} onClick={() => handleSpeak("js")}>
-          JS
-        </button>
-        <button
-          disabled={disableButton}
-          onClick={() => handleSpeak("personal")}
-        >
-          Personal
-        </button>
-        <button disabled={disableButton} onClick={() => handleSpeak("random")}>
-          Random
-        </button>
-      </div>
+      {isLoading ? (
+        <h1 className="question">Loading...</h1>
+      ) : (
+        <div className="actions">
+          <button disabled={disableButton} onClick={() => handleSpeak("react")}>
+            React
+          </button>
+          <button
+            disabled={disableButton}
+            onClick={() => handleSpeak("reactNative")}
+          >
+            React Native
+          </button>
+          <button disabled={disableButton} onClick={() => handleSpeak("js")}>
+            JS
+          </button>
+          <button
+            disabled={disableButton}
+            onClick={() => handleSpeak("personal")}
+          >
+            Personal
+          </button>
+          <button
+            disabled={disableButton}
+            onClick={() => handleSpeak("random")}
+          >
+            Random
+          </button>
+        </div>
+      )}
 
       {<h1 className="question">{question}</h1>}
     </div>
