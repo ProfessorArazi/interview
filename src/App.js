@@ -48,10 +48,17 @@ function App() {
         loop
         mode="normal"
         src="https://assets6.lottiefiles.com/private_files/lf30_emntxv1p.json"
-        style={{
-          width: screenWidth < 768 ? "100%" : "300px",
-          "margin-left": screenWidth < 768 ? "5%" : 0,
-        }}
+        style={
+          screenWidth > 768
+            ? {
+                width: "300px",
+              }
+            : {
+                width: "100%",
+                "margin-left": screenWidth < 768 ? "5%" : 0,
+                height: "250px",
+              }
+        }
       ></lottie-player>
 
       <div className="actions">
