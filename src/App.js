@@ -50,7 +50,9 @@ function App() {
     };
   }, []);
 
-  return (
+  return isLoading ? (
+    <h1 className="question">Loading...</h1>
+  ) : (
     <div className="App">
       <lottie-player
         ref={playerRef}
@@ -71,36 +73,29 @@ function App() {
         }
       ></lottie-player>
 
-      {isLoading ? (
-        <h1 className="question">Loading...</h1>
-      ) : (
-        <div className="actions">
-          <button disabled={disableButton} onClick={() => handleSpeak("react")}>
-            React
-          </button>
-          <button
-            disabled={disableButton}
-            onClick={() => handleSpeak("reactNative")}
-          >
-            React Native
-          </button>
-          <button disabled={disableButton} onClick={() => handleSpeak("js")}>
-            JS
-          </button>
-          <button
-            disabled={disableButton}
-            onClick={() => handleSpeak("personal")}
-          >
-            Personal
-          </button>
-          <button
-            disabled={disableButton}
-            onClick={() => handleSpeak("random")}
-          >
-            Random
-          </button>
-        </div>
-      )}
+      <div className="actions">
+        <button disabled={disableButton} onClick={() => handleSpeak("react")}>
+          React
+        </button>
+        <button
+          disabled={disableButton}
+          onClick={() => handleSpeak("reactNative")}
+        >
+          React Native
+        </button>
+        <button disabled={disableButton} onClick={() => handleSpeak("js")}>
+          JS
+        </button>
+        <button
+          disabled={disableButton}
+          onClick={() => handleSpeak("personal")}
+        >
+          Personal
+        </button>
+        <button disabled={disableButton} onClick={() => handleSpeak("random")}>
+          Random
+        </button>
+      </div>
 
       {<h1 className="question">{question}</h1>}
     </div>
