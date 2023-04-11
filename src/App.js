@@ -15,6 +15,7 @@ function App() {
   const handleSpeak = async (type) => {
     await setDisableButton(true);
     const voices = await synth.getVoices();
+    console.log(voices);
     const question = askQuestion(type);
     const utterance = new SpeechSynthesisUtterance(question);
     utterance.onend = () => {
