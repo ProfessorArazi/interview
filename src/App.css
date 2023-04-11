@@ -31,10 +31,6 @@
   cursor: pointer;
 }
 
-.actions button:hover {
-  background-color: rgb(222, 220, 220);
-}
-
 .actions button:disabled {
   background-color: gray;
   cursor: auto;
@@ -44,7 +40,5 @@
   .actions {
     width: 70%;
   }
-  .actions button:hover {
-    background-color: #fff;
-  }
+
 }
