@@ -14,10 +14,10 @@ function App() {
 
   const handleSpeak = async (type) => {
     await setDisableButton(true);
-    const voices = await synth.getVoices();
-    const voice = voices.find(
-      (voice) => voice.voiceURI === "Microsoft David - English (United States)"
-    );
+    // const voices = await synth.getVoices();
+    // const voice = voices.find(
+    //   (voice) => voice.voiceURI === "Microsoft David - English (United States)"
+    // );
     const question = askQuestion(type);
     const utterance = new SpeechSynthesisUtterance(question);
     utterance.onend = () => {
@@ -29,7 +29,7 @@ function App() {
     };
     await setQuestion(question);
     utterance.lang = "en-US";
-    utterance.voice = voice;
+    // utterance.voice = voice;
     synth.speak(utterance);
   };
 
