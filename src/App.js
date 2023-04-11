@@ -13,17 +13,19 @@ function App() {
   const synth = window.speechSynthesis;
 
   const handleSpeak = async (type) => {
-    debugger
     await setDisableButton(true);
     const question = askQuestion(type);
+    const startTime = performance.now();
     const utterance = new SpeechSynthesisUtterance(question);
+    const endTime = performance.now();
+    console.log(endTime - startTime);
     const voices = await synth.getVoices();
-    if(voices.length){
+    if (voices.length) {
       const voice = voices.find(
-        (voice) => voice.voiceURI === "Microsoft David - English (United States)"
+        (voice) =>
+          voice.voiceURI === "Microsoft David - English (United States)"
       );
-    utterance.voice = voice;
-      
+      utterance.voice = voice;
     }
     utterance.onend = () => {
       playerRef.current?.stop();
