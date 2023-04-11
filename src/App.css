@@ -1,0 +1,47 @@
+.App {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.question {
+  font-size: 20px;
+  color: #fff;
+  margin: 20px 0 0 0;
+  width: 80%;
+}
+
+.actions {
+  display: flex;
+  width: 55%;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.actions button {
+  flex: 1;
+  background-color: #fff;
+  color: #000;
+  border: transparent;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.actions button:hover{
+  background-color: rgb(222, 220, 220);
+}
+
+.actions button:disabled {
+  background-color: gray;
+  cursor: auto;
+}
+
+@media (max-width: 768px) {
+  .actions {
+    width: 70%;
+  }
+}
