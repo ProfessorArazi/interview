@@ -15,11 +15,11 @@ function App() {
   const handleSpeak = async (type) => {
     await setDisableButton(true);
     const question = askQuestion(type);
+    const utterance = await new SpeechSynthesisUtterance(question);
     const startTime = performance.now();
-    const utterance = new SpeechSynthesisUtterance(question);
+    const voices = await synth.getVoices();
     const endTime = performance.now();
     console.log(endTime - startTime);
-    const voices = await synth.getVoices();
     if (voices.length) {
       const voice = voices.find(
         (voice) =>
@@ -34,9 +34,13 @@ function App() {
     utterance.onstart = async () => {
       playerRef.current?.play();
     };
-    await setQuestion(question);
     utterance.lang = "en-US";
+
+    const beforeSpeak = performance.now();
     synth.speak(utterance);
+    const afterSpeak = performance.now();
+    console.log("speak", afterSpeak - beforeSpeak);
+    setQuestion(question);
   };
 
   const handleResize = () => {
