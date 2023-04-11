@@ -28,6 +28,7 @@ function App() {
       playerRef.current?.play();
     };
     await setQuestion(question);
+    utterance.lang = "en-US";
     utterance.voice = voice;
     synth.speak(utterance);
   };
