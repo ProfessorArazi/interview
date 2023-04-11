@@ -18,7 +18,7 @@ const reactNativeQuestions = `1	What is React Native?
 18	Differentiate between the React component and the React element.
 19	Why React Native use Redux?
 20	Which node_modules will run in React Native? How to test for this?
-21	What is Virtual DOM and how it works in React Native?
+21	What is Virtual dom and how it works in React Native?
 22	What is InteractionManager and what is its importance?
 23	What is the point of the relationship between React Native and React?
 24	What are the similarities between React Native and React?
@@ -48,6 +48,6 @@ const reactNativeQuestions = `1	What is React Native?
 48	What Is The Difference Between Using Constructor Vs Getinitialstate In React / React Native?
 49	What Happens When You Call Setstate?
 50	What Are Keys In React And Why Are They Important?
-51	What Is The Second Argument That Can Optionally Be Passed To Setstate And What Is Its Purpose?`.toLowerCase();
+51	What Is The Second Argument That Can Optionally Be Passed To Setstate And What Is Its Purpose?`;
 
 module.exports = reactNativeQuestions;

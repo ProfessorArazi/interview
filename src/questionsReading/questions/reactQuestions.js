@@ -19,11 +19,11 @@ const reactQuestions = `What is React?
 19	What is the use of refs?
 20	How to create refs?
 21	What are forward refs?
-22	Which is preferred option with in callback refs and findDOMNode()?
+22	Which is preferred option with in callback refs and find dom Node()?
 23	Why are String Refs legacy?
-24	What is Virtual DOM?
-25	How Virtual DOM works?
-26	What is the difference between Shadow DOM and Virtual DOM?
+24	What is Virtual dom?
+25	How Virtual dom works?
+26	What is the difference between Shadow dom and Virtual dom?
 27	What is React Fiber?
 28	What is the main goal of React Fiber?
 29	What are controlled components?
@@ -56,7 +56,7 @@ const reactQuestions = `What is React?
 56	What are the recommended ways for static type checking?
 57	What is the use of react-dom package?
 58	What is the purpose of render method of react-dom?
-59	What is ReactDOMServer?
+59	What is React DOM Server?
 60	How to use InnerHtml in React?
 61	How to use styles in React?
 62	How events are different in React?
@@ -65,7 +65,7 @@ const reactQuestions = `What is React?
 65	Is it good to use setState() in componentWillMount() method?
 66	What will happen if you use props in initial state?
 67	How do you conditionally render components?
-68	Why we need to be careful when spreading props on DOM elements??
+68	Why we need to be careful when spreading props on dom elements??
 69	How you use decorators in React?
 70	How do you memoize a component?
 71	How you implement Server-Side Rendering or SSR?
@@ -85,7 +85,7 @@ const reactQuestions = `What is React?
 85	Why is isMounted() an anti-pattern and what is the proper solution?
 86	What are the Pointer Events supported in React?
 87	Why should component names start with capital letter?
-88	Are custom DOM attributes supported in React v16?
+88	Are custom dom attributes supported in React v16?
 89	What is the difference between constructor and getInitialState?
 90	Can you force a component to re-render without calling setState?
 91	What is the difference between super() and super(props) in React using ES6 classes?
@@ -93,8 +93,8 @@ const reactQuestions = `What is React?
 93	How do you access props in attribute quotes?
 94	What is React PropType array with shape?
 95	How to conditionally apply class attributes?
-96	What is the difference between React and ReactDOM?
-97	Why ReactDOM is separated from React?
+96	What is the difference between React and React dom?
+97	Why React dom is separated from React?
 98	How to use React label element?
 99	How to combine multiple inline style objects?
 100	How to re-render the view when the browser is resized?
@@ -241,7 +241,7 @@ React Testing
 295	What is the typical use case of portals?
 296	How do you set default value for uncontrolled component?
 297	What is your favorite React stack?
-298	What is the difference between Real DOM and Virtual DOM?
+298	What is the difference between Real dom and Virtual dom?
 299	How to add Bootstrap to a react application?
 300	Can you list down top websites or applications using react as front end framework?
 301	Is it recommended to use CSS In JS technique in React?
@@ -276,6 +276,6 @@ React Testing
 330	What is prop drilling?
 331	What is state mutation and how to prevent it?
 332	What is the difference between useState and useRef hook?
-`.toLowerCase();
+`;
 
 module.exports = reactQuestions;

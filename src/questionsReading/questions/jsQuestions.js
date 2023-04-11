@@ -30,7 +30,7 @@ const jsQuestions = `
 29	Why do you need modules
 30	What is scope in javascript
 31	What is a service worker
-32	How do you manipulate DOM using a service worker
+32	How do you manipulate dom using a service worker
 33	How do you reuse information across service worker restarts
 34	What is IndexedDB
 35	What is web storage
@@ -48,7 +48,7 @@ const jsQuestions = `
 47	How do you check web storage browser support
 48	How do you check web workers browser support
 49	Give an example of a web worker
-50	What are the restrictions of web workers on DOM
+50	What are the restrictions of web workers on dom
 51	What is a promise
 52	Why do you need a promise
 53	What are the three states of promise
@@ -88,7 +88,7 @@ const jsQuestions = `
 87	What is event capturing
 88	How do you submit a form using JavaScript
 89	How do you find operating system details
-90	What is the difference between document load and DOMContentLoaded events
+90	What is the difference between document load and DOM Content Loaded events
 91	What is the difference between native, host and user objects
 92	What are the tools or techniques used for debugging JavaScript code
 93	What are the pros and cons of promises over callbacks
@@ -272,8 +272,8 @@ const jsQuestions = `
 271	What are the common tools used for minification
 272	How do you perform form validation using javascript
 273	How do you perform form validation without javascript
-274	What are the DOM methods available for constraint validation
-275	What are the available constraint validation DOM properties
+274	What are the dom methods available for constraint validation
+275	What are the available constraint validation dom properties
 276	What are the list of validity properties
 277	Give an example usage of rangeOverflow property
 278	Is enums feature available in javascript
@@ -293,7 +293,7 @@ const jsQuestions = `
 292	How do you invoke javascript code in an iframe from parent page
 293	How do get the timezone offset from date
 294	How do you load CSS and JS files dynamically
-295	What are the different methods to find HTML elements in DOM
+295	What are the different methods to find HTML elements in dom
 296	What is jQuery
 297	What is V8 JavaScript engine
 298	Why do we call javascript as dynamic language
@@ -449,6 +449,6 @@ const jsQuestions = `
 448	What is module pattern?
 449	What is Functon Composition?
 450	How to use await outside of async function prior to ES2022?
-`.toLowerCase()
+`
 
 module.exports = jsQuestions
