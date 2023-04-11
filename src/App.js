@@ -13,22 +13,9 @@ function App() {
   const synth = window.speechSynthesis;
 
   const handleSpeak = async (type) => {
-    const beforeDisable = performance.now();
-    await setDisableButton(true);
-    const afterDisable = performance.now();
-    console.log("disable", afterDisable - beforeDisable);
-    const beforeQuestion = performance.now();
     const question = askQuestion(type);
-    const afterQuestion = performance.now();
-    console.log("question", afterQuestion - beforeQuestion);
-    const beforeUtterance = performance.now();
     const utterance = await new SpeechSynthesisUtterance(question);
-    const afterUtterance = performance.now();
-    console.log("utterance", afterUtterance - beforeUtterance);
-    const beforeVoices = performance.now();
     const voices = await synth.getVoices();
-    const afterVoices = performance.now();
-    console.log("voices", afterVoices - beforeVoices);
     if (voices.length) {
       const voice = voices.find(
         (voice) =>
@@ -40,18 +27,13 @@ function App() {
       playerRef.current?.stop();
       setDisableButton(false);
     };
-    utterance.onstart = () => {
+    utterance.onstart = async () => {
       playerRef.current?.play();
     };
     utterance.lang = "en-US";
-    const beforeSpeak = performance.now();
+
     synth.speak(utterance);
-    const afterSpeak = performance.now();
-    console.log("speak", afterSpeak - beforeSpeak);
-    const beforeSetQuestion = performance.now();
     setQuestion(question);
-    const afterSetQuestion = performance.now();
-    console.log("setQuestion", afterSetQuestion - beforeSetQuestion);
   };
 
   const handleResize = () => {
