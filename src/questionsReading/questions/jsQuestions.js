@@ -94,7 +94,7 @@ const jsQuestions = `
 93	What are the pros and cons of promises over callbacks
 94	What is the difference between an attribute and a property
 95	What is same-origin policy
-96	What is the purpose of void 0
+96	What is the purpose of void
 97	Is JavaScript a compiled or interpreted language
 98	Is JavaScript a case-sensitive language
 99	Is there any relation between Java and JavaScript
