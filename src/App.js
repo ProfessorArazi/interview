@@ -2,6 +2,7 @@ import "./App.css";
 import "@lottiefiles/lottie-player";
 import { useEffect, useRef, useState } from "react";
 import { askQuestion } from "./questionsReading/questionsAsking";
+import { MdSubtitles } from "react-icons/md";
 
 function App() {
   const playerRef = useRef();
@@ -9,36 +10,21 @@ function App() {
   const [question, setQuestion] = useState("");
   const [disableButton, setDisableButton] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [voices, setVoices] = useState([]);
+  const [showQuestion, setShowQuestion] = useState(true);
 
   const synth = window.speechSynthesis;
-
-  useEffect(() => {
-    const getVoices = async () => {
-      setVoices(await synth.getVoices());
-    };
-    getVoices();
-  }, [synth]);
 
   const handleSpeak = async (type) => {
     setDisableButton(true);
     const question = askQuestion(type);
     const utterance = await new SpeechSynthesisUtterance(question);
-    // const voices = await synth.getVoices();
+    const voices = await synth.getVoices();
     if (voices.length) {
       const voice = voices.find(
         (voice) =>
           voice.voiceURI === "Microsoft David - English (United States)"
       );
-      if (voice) utterance.voice = voice;
-    } else {
-      if (
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          navigator.userAgent
-        )
-      ) {
-        utterance.voiceURI = "Microsoft David - English (United States)";
-      }
+      utterance.voice = voice;
     }
     utterance.onend = () => {
       playerRef.current?.stop();
@@ -65,6 +51,15 @@ function App() {
 
   return (
     <div className="App">
+      <button
+        onClick={() => setShowQuestion((prev) => !prev)}
+        className="subtitlesBtn"
+      >
+        <MdSubtitles
+          size={screenWidth < 768 ? 24 : 40}
+          color={showQuestion ? "#D6B370" : "#fff"}
+        />
+      </button>
       <lottie-player
         ref={playerRef}
         background="transparent"
@@ -108,7 +103,7 @@ function App() {
         </button>
       </div>
 
-      {<h1 className="question">{question}</h1>}
+      {showQuestion && <h1 className="question">{question}</h1>}
     </div>
   );
 }
