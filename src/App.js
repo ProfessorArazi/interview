@@ -9,12 +9,10 @@ function App() {
   const [question, setQuestion] = useState("");
   const [disableButton, setDisableButton] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [isLoading, setIsLoading] = useState(false);
 
   const synth = window.speechSynthesis;
 
   const handleSpeak = async (type) => {
-    setIsLoading(true);
     setDisableButton(true);
     const question = askQuestion(type);
     const utterance = await new SpeechSynthesisUtterance(question);
@@ -35,7 +33,6 @@ function App() {
     };
     utterance.lang = "en-US";
     synth.speak(utterance);
-    setIsLoading(false);
     setQuestion(question);
   };
 
@@ -44,15 +41,19 @@ function App() {
   };
 
   useEffect(() => {
+    const synth = window.speechSynthesis;
+    const utterance = new SpeechSynthesisUtterance("");
+    synth.speak(utterance);
+  }, []);
+
+  useEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-  return isLoading ? (
-    <h1 className="question">Loading...</h1>
-  ) : (
+  return (
     <div className="App">
       <lottie-player
         ref={playerRef}
