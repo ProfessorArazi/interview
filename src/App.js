@@ -2,7 +2,6 @@ import "./App.css";
 import "@lottiefiles/lottie-player";
 import { useEffect, useRef, useState } from "react";
 import { askQuestion } from "./questionsReading/questionsAsking";
-import { useCallback } from "react";
 
 function App() {
   const playerRef = useRef();
@@ -10,45 +9,52 @@ function App() {
   const [question, setQuestion] = useState("");
   const [disableButton, setDisableButton] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [voices, setVoices] = useState([]);
 
   const synth = window.speechSynthesis;
 
-  const handleSpeak = useCallback(
-    async (type) => {
-      const question = type === "" ? type : askQuestion(type);
-      const utterance = await new SpeechSynthesisUtterance(question);
-      if (type) {
-        setDisableButton(true);
-        const voices = await synth.getVoices();
-        if (voices.length) {
-          const voice = voices.find(
-            (voice) =>
-              voice.voiceURI === "Microsoft David - English (United States)"
-          );
-          utterance.voice = voice;
-        }
+  useEffect(() => {
+    const getVoices = async () => {
+      setVoices(await synth.getVoices());
+    };
+    getVoices();
+  }, [synth]);
+
+  const handleSpeak = async (type) => {
+    setDisableButton(true);
+    const question = askQuestion(type);
+    const utterance = await new SpeechSynthesisUtterance(question);
+    // const voices = await synth.getVoices();
+    if (voices.length) {
+      const voice = voices.find(
+        (voice) =>
+          voice.voiceURI === "Microsoft David - English (United States)"
+      );
+      if (voice) utterance.voice = voice;
+    } else {
+      if (
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
+      ) {
+        utterance.voiceURI = "Microsoft David - English (United States)";
       }
-      utterance.onend = () => {
-        playerRef.current?.stop();
-        setDisableButton(false);
-      };
-      utterance.onstart = () => {
-        playerRef.current?.play();
-      };
-      utterance.lang = "en-US";
-      synth.speak(utterance);
-      setQuestion(question);
-    },
-    [synth]
-  );
+    }
+    utterance.onend = () => {
+      playerRef.current?.stop();
+      setDisableButton(false);
+    };
+    utterance.onstart = () => {
+      playerRef.current?.play();
+    };
+    utterance.lang = "en-US";
+    synth.speak(utterance);
+    setQuestion(question);
+  };
 
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
   };
-
-  useEffect(() => {
-    handleSpeak("");
-  }, [handleSpeak]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
