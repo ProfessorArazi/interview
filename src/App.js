@@ -2,6 +2,7 @@ import "./App.css";
 import "@lottiefiles/lottie-player";
 import { useEffect, useRef, useState } from "react";
 import { askQuestion } from "./questionsReading/questionsAsking";
+import { useCallback } from "react";
 
 function App() {
   const playerRef = useRef();
@@ -12,39 +13,42 @@ function App() {
 
   const synth = window.speechSynthesis;
 
-  const handleSpeak = async (type) => {
-    setDisableButton(true);
-    const question = askQuestion(type);
-    const utterance = await new SpeechSynthesisUtterance(question);
-    const voices = await synth.getVoices();
-    if (voices.length) {
-      const voice = voices.find(
-        (voice) =>
-          voice.voiceURI === "Microsoft David - English (United States)"
-      );
-      utterance.voice = voice;
-    }
-    utterance.onend = () => {
-      playerRef.current?.stop();
-      setDisableButton(false);
-    };
-    utterance.onstart = () => {
-      playerRef.current?.play();
-    };
-    utterance.lang = "en-US";
-    synth.speak(utterance);
-    setQuestion(question);
-  };
+  const handleSpeak = useCallback(
+    async (type) => {
+      const question = type === "" ? type : askQuestion(type);
+      const utterance = await new SpeechSynthesisUtterance(question);
+      if (type) {
+        setDisableButton(true);
+        const voices = await synth.getVoices();
+        if (voices.length) {
+          const voice = voices.find(
+            (voice) =>
+              voice.voiceURI === "Microsoft David - English (United States)"
+          );
+          utterance.voice = voice;
+        }
+      }
+      utterance.onend = () => {
+        playerRef.current?.stop();
+        setDisableButton(false);
+      };
+      utterance.onstart = () => {
+        playerRef.current?.play();
+      };
+      utterance.lang = "en-US";
+      synth.speak(utterance);
+      setQuestion(question);
+    },
+    [synth]
+  );
 
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
   };
 
   useEffect(() => {
-    const synth = window.speechSynthesis;
-    const utterance = new SpeechSynthesisUtterance("");
-    synth.speak(utterance);
-  }, []);
+    handleSpeak("");
+  }, [handleSpeak]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
