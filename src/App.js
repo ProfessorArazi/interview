@@ -31,6 +31,9 @@ function App() {
       if (!+speed.trim()) {
         setSpeed("1");
         utterance.rate = "1";
+      } else if (+speed.trim() > 2) {
+        setSpeed("2");
+        utterance.rate = "2";
       } else utterance.rate = speed || "1";
     }
     utterance.onend = () => {
@@ -65,7 +68,7 @@ function App() {
             disabled={disableButton}
             value={speed}
             min={0.1}
-            max={10}
+            max={2}
             step={0.1}
             type="number"
             onChange={(e) => setSpeed(e.target.value)}
