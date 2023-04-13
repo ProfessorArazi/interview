@@ -61,6 +61,12 @@
   display: flex;
   height: 75%;
   width: 300px;
+ animation: fadeIn ease 1.5s;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
 @media (max-width: 768px) {
@@ -70,6 +76,7 @@
   .webcam_container {
     flex: 1;
     height: 40%;
+    align-items: center;
   }
 
   .zoom {

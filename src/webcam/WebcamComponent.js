@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 
-const WebcamComponent = ({ width }) => {
+const WebcamComponent = ({width}) => {
   const webcamRef = useRef(null);
 
   useEffect(() => {
