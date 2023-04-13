@@ -76,7 +76,7 @@
   }
   .webcam_container {
     flex: 1;
-    /* height: 30%; */
+    height: 50%;
     align-items: center;
   }
 

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 
-const WebcamComponent = ({width}) => {
+const WebcamComponent = ({ width }) => {
   const webcamRef = useRef(null);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const WebcamComponent = ({width}) => {
         ref={webcamRef}
         screenshotFormat="image/jpeg"
         videoConstraints={{ facingMode: "user" }}
-        style={{ width: width < 768 ? "100%" : "auto" }}
+        style={width < 768 ? { width: "100%", height: "100%" } : {}}
       />
     </div>
   );
