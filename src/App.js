@@ -29,10 +29,10 @@ function App() {
       );
       utterance.voice = voice;
       if (!+speed.trim()) {
-        setSpeed("1");
+        await setSpeed("1");
         utterance.rate = "1";
       } else if (+speed.trim() > 2) {
-        setSpeed("2");
+        await setSpeed("2");
         utterance.rate = "2";
       } else utterance.rate = speed || "1";
     }
