@@ -16,9 +16,13 @@
 }
 
 .options {
+  width: 90%;
   position: absolute;
-  right: 1rem;
-  top: 2rem;
+  top: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   z-index: 2;
 }
 
@@ -26,6 +30,21 @@
   background-color: transparent;
   border: none;
   cursor: pointer;
+}
+
+.speed_input {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.speed_input input {
+  width: 40px;
+}
+
+.speed_input label {
+  color: #ffffff;
 }
 
 .question {
@@ -62,12 +81,16 @@
   display: flex;
   height: 75%;
   width: 300px;
- animation: fadeIn ease 1.5s;
+  animation: fadeIn ease 1.5s;
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; }
-  100% { opacity: 1; }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 768px) {
@@ -82,5 +105,9 @@
 
   .zoom {
     padding-top: 1rem;
+  }
+
+  .speed_input input {
+    width: 25px;
   }
 }

@@ -13,6 +13,7 @@ function App() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [showQuestion, setShowQuestion] = useState(true);
   const [showCamera, setShowCamera] = useState(false);
+  const [speed, setSpeed] = useState("1");
 
   const synth = window.speechSynthesis;
 
@@ -27,6 +28,10 @@ function App() {
           voice.voiceURI === "Microsoft David - English (United States)"
       );
       utterance.voice = voice;
+      if (!+speed.trim()) {
+        setSpeed("1");
+        utterance.rate = "1";
+      } else utterance.rate = speed || "1";
     }
     utterance.onend = () => {
       playerRef.current?.stop();
@@ -54,21 +59,36 @@ function App() {
   return (
     <div className="App">
       <div className="options">
-        <button onClick={() => setShowQuestion((prev) => !prev)}>
-          <MdSubtitles
-            size={screenWidth < 768 ? 24 : 40}
-            color={showQuestion ? "#D6B370" : "#fff"}
+        <div className="speed_input">
+          <label>speed</label>
+          <input
+            disabled={disableButton}
+            value={speed}
+            min={0.1}
+            max={10}
+            step={0.1}
+            type="number"
+            onChange={(e) => setSpeed(e.target.value)}
           />
-        </button>
-        <button onClick={() => setShowCamera((prev) => !prev)}>
-          <MdCamera
-            size={screenWidth < 768 ? 24 : 40}
-            color={showCamera ? "#D6B370" : "#fff"}
-          />
-        </button>
+        </div>
+        <div>
+          <button onClick={() => setShowQuestion((prev) => !prev)}>
+            <MdSubtitles
+              size={screenWidth < 768 ? 24 : 40}
+              color={showQuestion ? "#D6B370" : "#fff"}
+            />
+          </button>
+          <button onClick={() => setShowCamera((prev) => !prev)}>
+            <MdCamera
+              size={screenWidth < 768 ? 24 : 40}
+              color={showCamera ? "#D6B370" : "#fff"}
+            />
+          </button>
+        </div>
       </div>
       <div className="zoom">
         <lottie-player
+          speed={speed}
           ref={playerRef}
           background="transparent"
           loop
