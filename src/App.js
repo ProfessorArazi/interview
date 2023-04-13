@@ -71,7 +71,7 @@ function App() {
             max={2}
             step={0.1}
             type="number"
-            onChange={(e) => setSpeed(e.target.value)}
+            onChange={async (e) => await setSpeed(e.target.value)}
           />
         </div>
         <div>
