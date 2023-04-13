@@ -12,6 +12,7 @@
   justify-content: center;
   align-items: center;
   height: 300px;
+  z-index: 1;
 }
 
 .options {
@@ -75,11 +76,11 @@
   }
   .webcam_container {
     flex: 1;
-    height: 40%;
+    /* height: 30%; */
     align-items: center;
   }
 
   .zoom {
-    padding-top: 1rem;
+    padding: 1rem 1rem 0;
   }
 }
