@@ -301,7 +301,6 @@ const jsQuestions = `
 300	How to set the cursor to wait
 301	How do you create an infinite loop
 302	Why do you need to avoid with statement
-303	What is the output of below for loops
 304	List down some of the features of ES6
 305	What is ES6
 306	Can I redeclare let and const variables
@@ -322,7 +321,6 @@ const jsQuestions = `
 321	What are the advantages of module loaders
 322	What is collation
 323	What is for...of statement
-324	What is the output of below spread operator array
 325	Is PostMessage secure
 326	What are the problems with postmessage target origin as wildcard
 327	How do you avoid receiving postMessages from attackers
@@ -335,7 +333,6 @@ const jsQuestions = `
 334	What is the purpose of double tilde operator
 335	How do you convert character to ASCII code
 336	What is ArrayBuffer
-337	What is the output of below string expression
 338	What is the purpose of Error object
 339	What is the purpose of EvalError object
 340	What are the list of cases error thrown from non-strict mode to strict mode
@@ -347,16 +344,13 @@ const jsQuestions = `
 346	How do you create specific number of copies of a string
 347	How do you return all matching strings against a regular expression
 348	How do you trim a string at the beginning or ending
-349	What is the output of below console statement with unary operator
 350	Does javascript uses mixins
 351	What is a thunk function
 352	What are asynchronous thunks
-353	What is the output of below function calls
 354	How to remove all line breaks from a string
 355	What is the difference between reflow and repaint
 356	What happens with negating an array
 357	What happens if we add two arrays
-358	What is the output of prepend additive operator on falsy values
 359	How do you create self string using special characters
 360	How do you remove falsy values from an array
 361	How do you get unique values of an array

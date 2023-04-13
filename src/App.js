@@ -2,7 +2,8 @@ import "./App.css";
 import "@lottiefiles/lottie-player";
 import { useEffect, useRef, useState } from "react";
 import { askQuestion } from "./questionsReading/questionsAsking";
-import { MdSubtitles } from "react-icons/md";
+import { MdSubtitles, MdCamera } from "react-icons/md";
+import WebcamComponent from "./webcam/WebcamComponent";
 
 function App() {
   const playerRef = useRef();
@@ -11,6 +12,7 @@ function App() {
   const [disableButton, setDisableButton] = useState(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [showQuestion, setShowQuestion] = useState(true);
+  const [showCamera, setShowCamera] = useState(false);
 
   const synth = window.speechSynthesis;
 
@@ -51,33 +53,42 @@ function App() {
 
   return (
     <div className="App">
-      <button
-        onClick={() => setShowQuestion((prev) => !prev)}
-        className="subtitlesBtn"
-      >
-        <MdSubtitles
-          size={screenWidth < 768 ? 24 : 40}
-          color={showQuestion ? "#D6B370" : "#fff"}
-        />
-      </button>
-      <lottie-player
-        ref={playerRef}
-        background="transparent"
-        loop
-        mode="normal"
-        src="https://assets6.lottiefiles.com/private_files/lf30_emntxv1p.json"
-        style={
-          screenWidth > 768
-            ? {
-                width: "300px",
-              }
-            : {
-                width: "100%",
-                "margin-left": screenWidth < 768 ? "5%" : 0,
-                height: "250px",
-              }
-        }
-      ></lottie-player>
+      <div className="options">
+        <button onClick={() => setShowQuestion((prev) => !prev)}>
+          <MdSubtitles
+            size={screenWidth < 768 ? 24 : 40}
+            color={showQuestion ? "#D6B370" : "#fff"}
+          />
+        </button>
+        <button onClick={() => setShowCamera((prev) => !prev)}>
+          <MdCamera
+            size={screenWidth < 768 ? 24 : 40}
+            color={showCamera ? "#D6B370" : "#fff"}
+          />
+        </button>
+      </div>
+      <div className="zoom">
+        <lottie-player
+          ref={playerRef}
+          background="transparent"
+          loop
+          mode="normal"
+          src="https://assets6.lottiefiles.com/private_files/lf30_emntxv1p.json"
+          style={
+            screenWidth > 768
+              ? {
+                  width: "300px",
+                }
+              : {
+                  flex: 1,
+                  width: "auto",
+                  "margin-left": showCamera ? 0 : "5%",
+                  height: "250px",
+                }
+          }
+        ></lottie-player>
+        {showCamera && <WebcamComponent width={screenWidth} />}
+      </div>
 
       <div className="actions">
         <button disabled={disableButton} onClick={() => handleSpeak("react")}>
