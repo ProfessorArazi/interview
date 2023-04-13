@@ -42,7 +42,6 @@ const reactNativeQuestions = `1	What is React Native?
 42	What is the storage system in React Native?
 43	How React Native load data from server?
 44	Are compile-to-JS libraries like TypeScript or ClojureScript compatible with React Native? Why or why not?
-45	What is wrong with this code for querying a native API?
 46	Imagine you have an app which is a series of lists of images (e.g. like Instagram). The app seems to crash at random. What steps can we take to investigate and mitigate this in React Native?
 47	Native apps that feel smooth often incorporate lots of little animations for state changes and transitions. How would you implement these behaviors?
 48	What Is The Difference Between Using Constructor Vs Getinitialstate In React / React Native?

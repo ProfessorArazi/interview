@@ -68,10 +68,11 @@
     width: 70%;
   }
   .webcam_container {
-flex: 1;
+    flex: 1;
+    height: 40%;
   }
-  
+
   .zoom {
-    padding: 0 10%;
+    padding: 5% 10% 0;
   }
 }
