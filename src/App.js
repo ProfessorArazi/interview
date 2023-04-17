@@ -105,7 +105,7 @@ function App() {
               : {
                   flex: 1,
                   width: "auto",
-                  "margin-left": showCamera ? 0 : "5%",
+                  "margin-left": "5%",
                   height: "250px",
                 }
           }
