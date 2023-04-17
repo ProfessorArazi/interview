@@ -25,7 +25,7 @@ const WebcamComponent = ({ width, closeCamera }) => {
         currentWebcamRef.srcObject = null;
       }
     };
-  }, []);
+  }, [closeCamera]);
 
   return (
     <div
