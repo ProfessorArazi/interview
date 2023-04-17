@@ -110,7 +110,12 @@ function App() {
                 }
           }
         ></lottie-player>
-        {showCamera && <WebcamComponent width={screenWidth} />}
+        {showCamera && (
+          <WebcamComponent
+            closeCamera={() => setShowCamera(false)}
+            width={screenWidth}
+          />
+        )}
       </div>
 
       <div className="actions">

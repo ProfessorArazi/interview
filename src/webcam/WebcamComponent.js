@@ -1,8 +1,9 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Webcam from "react-webcam";
 
-const WebcamComponent = ({ width }) => {
+const WebcamComponent = ({ width, closeCamera }) => {
   const webcamRef = useRef(null);
+  const [isWebcamLoaded, setIsWebcamLoaded] = useState(false);
 
   useEffect(() => {
     const currentWebcamRef = webcamRef.current;
@@ -11,10 +12,12 @@ const WebcamComponent = ({ width }) => {
       .then((stream) => {
         if (currentWebcamRef) {
           currentWebcamRef.srcObject = stream;
+          setIsWebcamLoaded(true);
         }
       })
       .catch((error) => {
-        console.error("Error accessing webcam:", error);
+        alert("You have to enable camera permissions");
+        closeCamera();
       });
 
     return () => {
@@ -25,7 +28,11 @@ const WebcamComponent = ({ width }) => {
   }, []);
 
   return (
-    <div className="webcam_container">
+    <div
+      className={`webcam_container ${
+        !isWebcamLoaded ? "webcam_container_hidden" : ""
+      }`}
+    >
       <Webcam
         audio={false}
         ref={webcamRef}
