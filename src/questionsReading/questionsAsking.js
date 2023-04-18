@@ -32,8 +32,9 @@ export const askQuestion = (type) => {
   const questionType =
     type === "random" ? types[Math.floor(Math.random() * 4)] : type;
   const questions = questionsTypes[questionType];
-  console.log(questions.length, questionType);
   let i = Math.floor(Math.random() * questions.length);
+  const question = questions[i];
+  if (!question) return `No ${type} questions left`;
   questions.splice(i, 1);
-  return questions[i];
+  return question;
 };
