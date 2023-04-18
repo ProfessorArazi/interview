@@ -29,12 +29,24 @@ const questionsTypes = {
 };
 
 export const askQuestion = (type) => {
-  const questionType =
-    type === "random" ? types[Math.floor(Math.random() * 4)] : type;
+  if (type === "random" && types.length === 0) {
+    return "No questions left";
+  }
+
+  const randomIndex = Math.floor(Math.random() * types.length);
+  const questionType = type === "random" ? types[randomIndex] : type;
   const questions = questionsTypes[questionType];
   let i = Math.floor(Math.random() * questions.length);
   const question = questions[i];
-  if (!question) return `No ${type} questions left`;
+  if (!question) {
+    if (type === "random") {
+      types.splice(randomIndex, 1);
+      return askQuestion(type);
+    }
+    return `No ${
+      type === "reactNative" ? "react native" : type
+    } questions left`;
+  }
   questions.splice(i, 1);
   return question;
 };
