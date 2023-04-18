@@ -1,6 +1,6 @@
 import "./App.css";
 import "@lottiefiles/lottie-player";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { askQuestion } from "./questionsReading/questionsAsking";
 import { MdSubtitles, MdCamera } from "react-icons/md";
 import WebcamComponent from "./webcam/WebcamComponent";
@@ -17,52 +17,40 @@ function App() {
 
   const synth = window.speechSynthesis;
 
-  const handleSpeak = useCallback(
-    async (type) => {
-      const question = type === "first" ? "first render" : askQuestion(type);
-      const utterance = await new SpeechSynthesisUtterance(question);
-      if (type === "first") {
-        utterance.volume = 0;
-        synth.speak(utterance);
-      } else {
-        setDisableButton(true);
-        const voices = await synth.getVoices();
-        if (voices.length) {
-          const voice = voices.find(
-            (voice) =>
-              voice.voiceURI === "Microsoft David - English (United States)"
-          );
-          utterance.voice = voice;
-          if (!+speed.trim()) {
-            await setSpeed("1");
-            utterance.rate = "1";
-          } else if (+speed.trim() > 2) {
-            await setSpeed("2");
-            utterance.rate = "2";
-          } else utterance.rate = speed || "1";
-        }
-        utterance.lang = "en-US";
-        synth.speak(utterance);
-        setQuestion(question);
-      }
-      utterance.onend = () => {
-        playerRef.current?.stop();
-        setDisableButton(false);
-      };
-      utterance.onstart = () => {
-        playerRef.current?.play();
-      };
-    },
-    [speed, synth]
-  );
+  const handleSpeak = async (type) => {
+    setDisableButton(true);
+    const question = askQuestion(type);
+    const utterance = await new SpeechSynthesisUtterance(question);
+    const voices = await synth.getVoices();
+    if (voices.length) {
+      const voice = voices.find(
+        (voice) =>
+          voice.voiceURI === "Microsoft David - English (United States)"
+      );
+      utterance.voice = voice;
+      if (!+speed.trim()) {
+        await setSpeed("1");
+        utterance.rate = "1";
+      } else if (+speed.trim() > 2) {
+        await setSpeed("2");
+        utterance.rate = "2";
+      } else utterance.rate = speed || "1";
+    }
+    utterance.onend = () => {
+      playerRef.current?.stop();
+      setDisableButton(false);
+    };
+    utterance.onstart = () => {
+      playerRef.current?.play();
+    };
+    utterance.lang = "en-US";
+    synth.speak(utterance);
+    setQuestion(question);
+  };
 
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
   };
-
-  useEffect(() => {
-    handleSpeak("first");
-  }, [handleSpeak]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
