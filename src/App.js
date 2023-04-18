@@ -2,7 +2,7 @@ import "./App.css";
 import "@lottiefiles/lottie-player";
 import { useEffect, useRef, useState } from "react";
 import { askQuestion } from "./questionsReading/questionsAsking";
-import { MdSubtitles, MdCamera } from "react-icons/md";
+import { MdSubtitles, MdCameraAlt } from "react-icons/md";
 import WebcamComponent from "./webcam/WebcamComponent";
 
 function App() {
@@ -82,7 +82,7 @@ function App() {
             />
           </button>
           <button onClick={() => setShowCamera((prev) => !prev)}>
-            <MdCamera
+            <MdCameraAlt
               size={screenWidth < 768 ? 24 : 40}
               color={showCamera ? "#D6B370" : "#fff"}
             />
