@@ -7,12 +7,14 @@ import reactNativeQuestions from "./questions/reactNativeQuestions";
 import jsQuestions from "./questions/jsQuestions";
 import personalQuestions from "./questions/personalQuestions";
 
+const types = ["react", "reactNative", "js", "personal"];
+
 const mappingQuestions = (questions) =>
   questions
     .split(/\s\d+\s/)
     .map((question) =>
       question
-      .replace(/Q[0-9]+|“/ig, "")
+        .replace(/Q[0-9]+|“/gi, "")
         .replace("\t", "")
         .replace("\n", "")
         .replace(/[…]|-/g, " ")
@@ -24,13 +26,13 @@ const questionsTypes = {
   reactNative: mappingQuestions(reactNativeQuestions),
   js: mappingQuestions(jsQuestions),
   personal: mappingQuestions(personalQuestions),
-  random: mappingQuestions(
-    reactQuestions + reactNativeQuestions + jsQuestions + personalQuestions
-  ),
 };
 
 export const askQuestion = (type) => {
-  const questions = questionsTypes[type];
+  const questionType =
+    type === "random" ? types[Math.floor(Math.random() * 4)] : type;
+  const questions = questionsTypes[questionType];
+  console.log(questions.length, questionType);
   let i = Math.floor(Math.random() * questions.length);
   questions.splice(i, 1);
   return questions[i];
