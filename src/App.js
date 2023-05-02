@@ -14,6 +14,7 @@ function App() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [showQuestion, setShowQuestion] = useState(true);
   const [showCamera, setShowCamera] = useState(false);
+  const [firstCamera, setFirstCamera] = useState(true);
   const [loading, setLoading] = useState(false);
   const [speed, setSpeed] = useState("1");
 
@@ -62,7 +63,12 @@ function App() {
               color={showQuestion ? "#D6B370" : "#fff"}
             />
           </button>
-          <button onClick={() => setShowCamera((prev) => !prev)}>
+          <button
+            onClick={() => {
+              showCamera && setFirstCamera(false);
+              setShowCamera((prev) => !prev);
+            }}
+          >
             <MdCameraAlt
               size={screenWidth < 768 ? 24 : 40}
               color={showCamera ? "#D6B370" : "#fff"}
@@ -95,6 +101,7 @@ function App() {
           <WebcamComponent
             closeCamera={() => setShowCamera(false)}
             width={screenWidth}
+            first={firstCamera}
           />
         )}
       </div>

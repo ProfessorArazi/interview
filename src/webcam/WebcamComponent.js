@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import Webcam from "react-webcam";
+import LoadingSpinner from "../loading/LoadingSpinner";
 
-const WebcamComponent = ({ width, closeCamera }) => {
+const WebcamComponent = ({ width, closeCamera, first }) => {
   const webcamRef = useRef(null);
   const [isWebcamLoaded, setIsWebcamLoaded] = useState(false);
 
@@ -28,19 +29,22 @@ const WebcamComponent = ({ width, closeCamera }) => {
   }, [closeCamera]);
 
   return (
-    <div
-      className={`webcam_container ${
-        !isWebcamLoaded ? "webcam_container_hidden" : ""
-      }`}
-    >
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        screenshotFormat="image/jpeg"
-        videoConstraints={{ facingMode: "user" }}
-        style={width < 768 ? { width: "100%", height: "100%" } : {}}
-      />
-    </div>
+    <>
+      <div
+        className={`webcam_container ${
+          !isWebcamLoaded ? "webcam_container_hidden" : ""
+        }`}
+      >
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          videoConstraints={{ facingMode: "user" }}
+          style={width < 768 ? { width: "100%", height: "100%" } : {}}
+        />
+      </div>
+      {!isWebcamLoaded && first && <LoadingSpinner />}
+    </>
   );
 };
 
