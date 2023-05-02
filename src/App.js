@@ -1,9 +1,10 @@
 import "./App.css";
 import "@lottiefiles/lottie-player";
 import { useEffect, useRef, useState } from "react";
-import { askQuestion } from "./questionsReading/questionsAsking";
 import { MdSubtitles, MdCameraAlt } from "react-icons/md";
 import WebcamComponent from "./webcam/WebcamComponent";
+import { handleSpeak } from "./speak/handleSpeak";
+import LoadingSpinner from "./loading/LoadingSpinner";
 
 function App() {
   const playerRef = useRef();
@@ -13,39 +14,19 @@ function App() {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [showQuestion, setShowQuestion] = useState(true);
   const [showCamera, setShowCamera] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [speed, setSpeed] = useState("1");
 
-  const synth = window.speechSynthesis;
-
-  const handleSpeak = async (type) => {
-    setDisableButton(true);
-    const question = askQuestion(type);
-    const utterance = await new SpeechSynthesisUtterance(question);
-    const voices = await synth.getVoices();
-    if (voices.length) {
-      const voice = voices.find(
-        (voice) =>
-          voice.voiceURI === "Microsoft David - English (United States)"
-      );
-      utterance.voice = voice;
-      if (!+speed.trim()) {
-        await setSpeed("1");
-        utterance.rate = "1";
-      } else if (+speed.trim() > 2) {
-        await setSpeed("2");
-        utterance.rate = "2";
-      } else utterance.rate = speed || "1";
-    }
-    utterance.onend = () => {
-      playerRef.current?.stop();
-      setDisableButton(false);
+  const speakHandler = async (type) => {
+    const speakData = {
+      setDisableButton,
+      setSpeed,
+      speed,
+      playerRef,
+      setQuestion,
+      setLoading,
     };
-    utterance.onstart = () => {
-      playerRef.current?.play();
-    };
-    utterance.lang = "en-US";
-    synth.speak(utterance);
-    setQuestion(question);
+    handleSpeak(type, speakData);
   };
 
   const handleResize = () => {
@@ -119,30 +100,31 @@ function App() {
       </div>
 
       <div className="actions">
-        <button disabled={disableButton} onClick={() => handleSpeak("react")}>
+        <button disabled={disableButton} onClick={() => speakHandler("react")}>
           React
         </button>
         <button
           disabled={disableButton}
-          onClick={() => handleSpeak("reactNative")}
+          onClick={() => speakHandler("reactNative")}
         >
           React Native
         </button>
-        <button disabled={disableButton} onClick={() => handleSpeak("js")}>
+        <button disabled={disableButton} onClick={() => speakHandler("js")}>
           JS
         </button>
         <button
           disabled={disableButton}
-          onClick={() => handleSpeak("personal")}
+          onClick={() => speakHandler("personal")}
         >
           Personal
         </button>
-        <button disabled={disableButton} onClick={() => handleSpeak("random")}>
+        <button disabled={disableButton} onClick={() => speakHandler("random")}>
           Random
         </button>
       </div>
 
-      {showQuestion && <h1 className="question">{question}</h1>}
+      {showQuestion && !loading && <h1 className="question">{question}</h1>}
+      {loading && <LoadingSpinner />}
     </div>
   );
 }
