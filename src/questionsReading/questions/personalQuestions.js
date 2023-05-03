@@ -3,7 +3,6 @@ Q2	What are your greatest strengths?	6
 Q3	What are your greatest weaknesses?	6
 Q4	Tell me about something you did – or failed to do – that you now feel a little ashamed of.	7
 Q5	Why are you leaving (or did you leave) this position?	8
-Q6	The “Silent Treatment”	9
 Q7	Why should I hire you?	9
 Q8	Aren’t you overqualified for this position?	10
 Q9	Where do you see yourself five years from now?	11
@@ -15,7 +14,6 @@ Q14	Tell me honestly about the strong points and weak points of your boss (compa
 Q15	What good books have you read lately?	14
 Q16	Tell me about a situation when your work was criticized.	14
 Q17	What are your outside interest?	15
-Q18	The “Fatal Flaw” question	15
 Q19	How do you feel about reporting to a younger person (minority, woman, etc)?16 Q20	On confidential matters…	16
 Q21	Would you lie for the company?	17
 Q22	Looking back, what would you do differently in your life?	17
@@ -46,15 +44,12 @@ Q44	Where could you use some improvement?	28
 Q45	What do you worry about?	28
 Q46	How many hours a week do you normally work?	28
 Q47	What’s the most difficult part of being a (job title)?	29
-Q48	The “Hypothetical Problem”	29
 Q49	What was the toughest challenge you’ve ever faced?	29
 Q50	Have you consider starting your own business?	30
 Q51	What are your goals?	31
 Q52	What do you for when you hire people?	31
 Q53	Sell me this stapler…(this pencil…this clock…or some other object on interviewer’s desk).	31
 Q54	“The Salary Question” – How much money do you want?	33
-Q55	The Illegal Question	33
-Q56	The “Secret” Illegal Question	34
 Q57	What was the toughest part of your last job?	35
 Q58	How do you define success…and how do you measure up to your own definition?.	35
 Q59	“The Opinion Question” – What do you think about …Abortion…The President…The Death Penalty…(or any other controversial subject)?	36
