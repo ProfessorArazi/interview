@@ -21,7 +21,7 @@ export const handleSpeak = async (type, speakData) => {
     const question = askQuestion(type);
     const utterance = await new SpeechSynthesisUtterance(question);
     const voices = await synth.getVoices();
-    if (voices.length) {
+    if (voices.length && question.match(/[a-z]/gi)) {
       const voice = voices.find(
         (voice) =>
           voice.voiceURI === "Microsoft David - English (United States)"
@@ -34,6 +34,7 @@ export const handleSpeak = async (type, speakData) => {
         await setSpeed("2");
         utterance.rate = "2";
       } else utterance.rate = speed || "1";
+      utterance.lang = "en-US";
     }
     utterance.onend = () => {
       playerRef.current?.stop();
@@ -43,7 +44,6 @@ export const handleSpeak = async (type, speakData) => {
       playerRef.current?.play();
       setLoading(false);
     };
-    utterance.lang = "en-US";
     synth.speak(utterance);
     setQuestion(question);
   } catch (e) {

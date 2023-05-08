@@ -7,39 +7,52 @@ import reactNativeQuestions from "./questions/reactNativeQuestions";
 import jsQuestions from "./questions/jsQuestions";
 import personalQuestions from "./questions/personalQuestions";
 
-const types = ["react", "reactNative", "js", "personal"];
+// const types = ["React", "React Native", "JS", "Personal", "Random"];
 
-const mappingQuestions = (questions) =>
-  questions
-    .split(/\s\d+\s/)
-    .map((question) =>
+const mappingQuestions = (questions, custom) => {
+  let modifiedQuestions;
+
+  if (custom) {
+    modifiedQuestions = questions.split("\n");
+  } else
+    modifiedQuestions = questions.split(/\s\d+\s/).map((question) =>
       question
         .replace(/Q[0-9]+|“/gi, "")
         .replace("\t", "")
         .replace("\n", "")
         .replace(/[…]|-/g, " ")
-    )
-    .filter((question) => /[a-z]/gi.test(question));
+    );
+  return modifiedQuestions.filter((question) =>
+    /[a-z\u0590-\u05fe]/gi.test(question)
+  );
+};
 
 const questionsTypes = {
-  react: mappingQuestions(reactQuestions),
-  reactNative: mappingQuestions(reactNativeQuestions),
-  js: mappingQuestions(jsQuestions),
-  personal: mappingQuestions(personalQuestions),
+  React: mappingQuestions(reactQuestions),
+  "React Native": mappingQuestions(reactNativeQuestions),
+  JS: mappingQuestions(jsQuestions),
+  Personal: mappingQuestions(personalQuestions),
+};
+
+const types = [...Object.keys(questionsTypes), "Random"];
+
+export const addQuestions = (data) => {
+  questionsTypes[data.subject] = mappingQuestions(data.questions, true);
+  if (!types.includes(data.subject)) types.push(data.subject);
 };
 
 export const askQuestion = (type) => {
-  if (type === "random" && types.length === 0) {
+  if (type === "Random" && types.length === 0) {
     return "No questions left";
   }
 
   const randomIndex = Math.floor(Math.random() * types.length);
-  const questionType = type === "random" ? types[randomIndex] : type;
+  const questionType = type === "Random" ? types[randomIndex] : type;
   const questions = questionsTypes[questionType];
   let i = Math.floor(Math.random() * questions.length);
   const question = questions[i];
   if (!question) {
-    if (type === "random") {
+    if (type === "Random") {
       types.splice(randomIndex, 1);
       return askQuestion(type);
     }

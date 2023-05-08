@@ -1,0 +1,29 @@
+.login-title {
+  margin-top: 0;
+}
+
+.login-form h5 {
+  cursor: pointer;
+}
+
+.login-form input {
+  width: 20%;
+}
+
+.login-form .button-container {
+  width: 21%;
+}
+
+.login-form .button-container button {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .login-form input,
+  .login-form textarea {
+    width: 80%;
+  }
+  .login-form .button-container {
+    width: 81%;
+  }
+}

@@ -1,4 +1,6 @@
-const personalQuestions = `Q1	Tell me about yourself.	5
+const personalQuestions =
+ `
+Q1	Tell me about yourself.	5
 Q2	What are your greatest strengths?	6
 Q3	What are your greatest weaknesses?	6
 Q4	Tell me about something you did – or failed to do – that you now feel a little ashamed of.	7
@@ -57,6 +59,7 @@ Q60	If you won $10 million lottery, would you still work?	36
 Q61	Looking back on your last position, have you done your best work?	37
 Q62	Why should I hire you from the outside when I could promote someone from within?	37
 Q63	Tell me something negative you’ve heard about our company…	38
-Q64	On a scale of one to ten, rate me as an interviewer.`;
+Q64	On a scale of one to ten, rate me as an interviewer.`
+;
 
 module.exports = personalQuestions;
