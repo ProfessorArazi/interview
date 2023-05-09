@@ -11,6 +11,7 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
     subject: null,
     questions: null,
   });
+  const [community, setCommunity] = useState(false);
   let disabled = !values.subject.trim() || !values.questions.trim();
 
   const addQuestionsHandler = (e) => {
@@ -33,9 +34,11 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
         data: {
           ...data,
           questions: [{ ...values, questions: values.questions.split("\n") }],
+          community,
         },
       });
     }
+
     closeForm();
   };
 

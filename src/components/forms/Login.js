@@ -9,7 +9,7 @@ import {
 } from "../../helpers/questionsReading/questionsAsking";
 import LoadingSpinner from "../loading/LoadingSpinner";
 
-const Login = ({ closeLogin, screenWidth, setCustomSubjects }) => {
+const Login = ({ closeLogin, screenWidth, setCustomSubjects, setIsAdmin }) => {
   const [signup, setSignup] = useState(false);
   const [isLottieLoaded, setIsLottieLoaded] = useState(false);
   const [values, setValues] = useState({
@@ -44,6 +44,10 @@ const Login = ({ closeLogin, screenWidth, setCustomSubjects }) => {
     if (!signup) {
       const subjects = updateQuestions(data.questions);
       setCustomSubjects(subjects);
+    }
+
+    if (data.isAdmin) {
+      setIsAdmin(true);
     }
 
     localStorage.setItem(

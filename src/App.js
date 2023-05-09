@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import Home from "./home/Home";
+import Home from "./pages/home/Home";
 import AddQuestionsForm from "./components/forms/AddQuestionsForm";
 import Login from "./components/forms/Login";
 import { httpRequest } from "./helpers/http/httpRequest";
 import { updateQuestions } from "./helpers/questionsReading/questionsAsking";
 import LoadingSpinner from "./components/loading/LoadingSpinner";
+import Admin from "./pages/admin/Admin";
 
 function App() {
   const [page, setPage] = useState("home");
@@ -14,6 +15,7 @@ function App() {
   const [showDefaultSubjects, setShowDefaultSubjects] = useState(true);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
@@ -31,6 +33,7 @@ function App() {
         });
         const subjects = updateQuestions(res.questions);
         setCustomSubjects(subjects);
+        if (res.isAdmin) setIsAdmin(true);
         setIsLoading(false);
       }
     };
@@ -48,6 +51,8 @@ function App() {
     <div className="App">
       {isLoading ? (
         <LoadingSpinner />
+      ) : isAdmin ? (
+        <Admin />
       ) : page === "form" ? (
         <AddQuestionsForm
           screenWidth={screenWidth}
@@ -56,6 +61,7 @@ function App() {
         />
       ) : page === "login" ? (
         <Login
+          setIsAdmin={setIsAdmin}
           setCustomSubjects={setCustomSubjects}
           screenWidth={screenWidth}
           closeLogin={() => setPage("home")}

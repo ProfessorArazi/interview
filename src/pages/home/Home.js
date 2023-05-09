@@ -1,10 +1,10 @@
 import React from "react";
 import "@lottiefiles/lottie-player";
 import { MdSubtitles, MdCameraAlt, MdPerson } from "react-icons/md";
-import WebcamComponent from "../components/webcam/WebcamComponent";
-import LoadingSpinner from "../components/loading/LoadingSpinner";
+import WebcamComponent from "../../components/webcam/WebcamComponent";
+import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import { useRef, useState } from "react";
-import { handleSpeak } from "../helpers/speak/handleSpeak";
+import { handleSpeak } from "../../helpers/speak/handleSpeak";
 
 const Home = ({
   setPage,
