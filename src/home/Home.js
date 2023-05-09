@@ -68,12 +68,12 @@ const Home = ({
               color={showCamera ? "#D6B370" : "#fff"}
             />
           </button>
-          <button onClick={() => setPage("login")}>
+          {!localStorage.getItem("data") && <button onClick={() => setPage("login")}>
             <MdPerson
               size={screenWidth < 768 ? 24 : 40}
               color={showCamera ? "#D6B370" : "#fff"}
             />
-          </button>
+          </button>}
         </div>
       </div>
       <div className="zoom">

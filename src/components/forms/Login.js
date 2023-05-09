@@ -2,10 +2,21 @@ import React, { useEffect, useState } from "react";
 import "@lottiefiles/lottie-player";
 import { MdArrowForward } from "react-icons/md";
 import "./Login.css";
+import { httpRequest } from "../../helpers/http/httpRequest";
+import {
+  customTypes,
+  updateQuestions,
+} from "../../helpers/questionsReading/questionsAsking";
+import LoadingSpinner from "../loading/LoadingSpinner";
 
-const Login = ({ closeLogin, screenWidth }) => {
+const Login = ({ closeLogin, screenWidth, setCustomSubjects }) => {
   const [signup, setSignup] = useState(false);
   const [isLottieLoaded, setIsLottieLoaded] = useState(false);
+  const [values, setValues] = useState({
+    userName: "",
+    password: "",
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const lottiePlayer = document.querySelector("lottie-player");
@@ -14,7 +25,39 @@ const Login = ({ closeLogin, screenWidth }) => {
     }
   }, []);
 
-  return (
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    const customQuestions = Object.entries(customTypes).map((q) => ({
+      subject: q[0],
+      questions: q[1],
+    }));
+    setIsLoading(true);
+    const data = await httpRequest({
+      method: "post",
+      url: `/users${signup ? "" : "/login"}`,
+      data: { ...values, questions: customQuestions },
+    });
+    if (!data.token) {
+      setIsLoading(false);
+      return "error";
+    }
+    if (!signup) {
+      const subjects = updateQuestions(data.questions);
+      setCustomSubjects(subjects);
+    }
+
+    localStorage.setItem(
+      "data",
+      JSON.stringify({ token: data.token, id: data.id })
+    );
+    closeLogin();
+  };
+
+  return isLoading ? (
+    <div className="center">
+      <LoadingSpinner />
+    </div>
+  ) : (
     <>
       <div className="options back">
         <button onClick={closeLogin}>
@@ -41,26 +84,26 @@ const Login = ({ closeLogin, screenWidth }) => {
       {isLottieLoaded && (
         <>
           <h1 className="title login-title">Sign {signup ? "Up" : "In"}</h1>
-          <form className="form login-form" onSubmit={() => {}}>
+          <form className="form login-form" onSubmit={submitHandler}>
             <input
               placeholder="user name"
-              // onChange={(e) =>
-              //   setValues((prev) => ({ ...prev, subject: e.target.value }))
-              // }
+              onChange={(e) =>
+                setValues((prev) => ({ ...prev, userName: e.target.value }))
+              }
             />
             <input
               type="password"
               placeholder="password"
-              // onChange={(e) =>
-              //   setValues((prev) => ({ ...prev, subject: e.target.value }))
-              // }
+              onChange={(e) =>
+                setValues((prev) => ({ ...prev, password: e.target.value }))
+              }
             />
-            <h5
+            <h4
               onClick={() => setSignup((prev) => !prev)}
               className="title login-title"
             >
               Sign {signup ? "In" : "Up"}
-            </h5>
+            </h4>
             <div className="button-container">
               <button>{signup ? "Register" : "Login"}</button>
             </div>

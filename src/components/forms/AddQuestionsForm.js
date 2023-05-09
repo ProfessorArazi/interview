@@ -3,6 +3,7 @@ import { useState } from "react";
 import { addQuestions } from "../../helpers/questionsReading/questionsAsking";
 import "./AddQuestionsForm.css";
 import { MdArrowForward } from "react-icons/md";
+import { httpRequest } from "../../helpers/http/httpRequest";
 
 const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
   const [values, setValues] = useState({ subject: "", questions: "" });
@@ -24,10 +25,19 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
     setCustomSubjects((prev) =>
       prev.includes(values.subject) ? prev : [...prev, values.subject]
     );
+    const data = JSON.parse(localStorage.getItem("data"));
+    if (data) {
+      httpRequest({
+        method: "post",
+        url: "/addQuestions",
+        data: {
+          ...data,
+          questions: [{ ...values, questions: values.questions.split("\n") }],
+        },
+      });
+    }
     closeForm();
   };
-
-  console.log(errors);
 
   return (
     <>

@@ -1,9 +1,17 @@
+.center {
+  position: absolute;
+  top: 20%;
+}
+
 .login-title {
   margin-top: 0;
 }
 
-.login-form h5 {
+.login-form h4 {
   cursor: pointer;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .login-form input {
