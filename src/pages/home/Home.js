@@ -119,34 +119,7 @@ const Home = ({
           />
         )}
       </div>
-
-      <div className="custom">
-        <button disabled={disableButton} onClick={() => setPage("form")}>
-          Custom
-        </button>
-
-        <button
-          disabled={disableButton}
-          onClick={() => setShowDefaultSubjects((prev) => !prev)}
-        >
-          {showDefaultSubjects ? "Remove Default" : "Show Default"}
-        </button>
-        <button disabled={disableButton} onClick={getCommunity}>
-          Community
-        </button>
-      </div>
-      <div className="actions">
-        {subjects.map((subject) => (
-          <button
-            key={Math.random()}
-            disabled={disableButton}
-            onClick={() => speakHandler(subject)}
-          >
-            {subject}
-          </button>
-        ))}
-      </div>
-
+      {loading && <LoadingSpinner />}
       {showQuestion && !loading && (
         <h1
           dir={question.match(/[a-z]/gi) ? "ltr" : "rtl"}
@@ -155,7 +128,36 @@ const Home = ({
           {question}
         </h1>
       )}
-      {loading && <LoadingSpinner />}
+      {!loading && (
+        <>
+          <div className="custom">
+            <button disabled={disableButton} onClick={() => setPage("form")}>
+              Custom
+            </button>
+
+            <button
+              disabled={disableButton}
+              onClick={() => setShowDefaultSubjects((prev) => !prev)}
+            >
+              {showDefaultSubjects ? "Remove Default" : "Show Default"}
+            </button>
+            <button disabled={disableButton} onClick={getCommunity}>
+              Community
+            </button>
+          </div>
+          <div className="actions">
+            {subjects.map((subject) => (
+              <button
+                key={Math.random()}
+                disabled={disableButton}
+                onClick={() => speakHandler(subject)}
+              >
+                {subject}
+              </button>
+            ))}
+          </div>
+        </>
+      )}
     </>
   );
 };
