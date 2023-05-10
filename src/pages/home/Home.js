@@ -12,6 +12,7 @@ const Home = ({
   setShowDefaultSubjects,
   showDefaultSubjects,
   screenWidth,
+  isAdmin,
 }) => {
   const playerRef = useRef();
 
@@ -68,12 +69,14 @@ const Home = ({
               color={showCamera ? "#D6B370" : "#fff"}
             />
           </button>
-          {!localStorage.getItem("data") && <button onClick={() => setPage("login")}>
-            <MdPerson
-              size={screenWidth < 768 ? 24 : 40}
-              color={showCamera ? "#D6B370" : "#fff"}
-            />
-          </button>}
+          {(!localStorage.getItem("data") || isAdmin) && (
+            <button onClick={() => setPage(isAdmin ? "admin" : "login")}>
+              <MdPerson
+                size={screenWidth < 768 ? 24 : 40}
+                color={showCamera ? "#D6B370" : "#fff"}
+              />
+            </button>
+          )}
         </div>
       </div>
       <div className="zoom">

@@ -9,7 +9,7 @@ import {
 } from "../../helpers/questionsReading/questionsAsking";
 import LoadingSpinner from "../loading/LoadingSpinner";
 
-const Login = ({ closeLogin, screenWidth, setCustomSubjects, setIsAdmin }) => {
+const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
   const [signup, setSignup] = useState(false);
   const [isLottieLoaded, setIsLottieLoaded] = useState(false);
   const [values, setValues] = useState({
@@ -46,15 +46,16 @@ const Login = ({ closeLogin, screenWidth, setCustomSubjects, setIsAdmin }) => {
       setCustomSubjects(subjects);
     }
 
-    if (data.isAdmin) {
-      setIsAdmin(true);
-    }
-
     localStorage.setItem(
       "data",
       JSON.stringify({ token: data.token, id: data.id })
     );
-    closeLogin();
+
+    if (data.isAdmin) {
+      setIsAdmin(true);
+    }
+
+    setPage(data.isAdmin ? "admin" : "home");
   };
 
   return isLoading ? (
@@ -64,7 +65,7 @@ const Login = ({ closeLogin, screenWidth, setCustomSubjects, setIsAdmin }) => {
   ) : (
     <>
       <div className="options back">
-        <button onClick={closeLogin}>
+        <button onClick={() => setPage("home")}>
           <MdArrowForward size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
         </button>
       </div>

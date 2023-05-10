@@ -33,7 +33,10 @@ function App() {
         });
         const subjects = updateQuestions(res.questions);
         setCustomSubjects(subjects);
-        if (res.isAdmin) setIsAdmin(true);
+        if (res.isAdmin) {
+          setIsAdmin(true);
+          setPage("admin");
+        }
         setIsLoading(false);
       }
     };
@@ -51,8 +54,8 @@ function App() {
     <div className="App">
       {isLoading ? (
         <LoadingSpinner />
-      ) : isAdmin ? (
-        <Admin />
+      ) : isAdmin && page === "admin" ? (
+        <Admin closeAdmin={() => setPage("home")} screenWidth={screenWidth} />
       ) : page === "form" ? (
         <AddQuestionsForm
           screenWidth={screenWidth}
@@ -64,10 +67,11 @@ function App() {
           setIsAdmin={setIsAdmin}
           setCustomSubjects={setCustomSubjects}
           screenWidth={screenWidth}
-          closeLogin={() => setPage("home")}
+          setPage={setPage}
         />
       ) : (
         <Home
+          isAdmin={isAdmin}
           screenWidth={screenWidth}
           subjects={
             showDefaultSubjects

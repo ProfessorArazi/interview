@@ -27,7 +27,7 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
       prev.includes(values.subject) ? prev : [...prev, values.subject]
     );
     const data = JSON.parse(localStorage.getItem("data"));
-    if (data) {
+    if (data || community) {
       httpRequest({
         method: "post",
         url: "/addQuestions",
@@ -75,6 +75,14 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
             setValues((prev) => ({ ...prev, questions: e.target.value }));
           }}
         />
+        <div>
+          <input
+            type="checkbox"
+            onChange={() => setCommunity((prev) => !prev)}
+            value={community}
+          />
+          <p>I would like to share this questions with the community</p>
+        </div>
         <div className="button-container">
           <button disabled={disabled}>Submit</button>
         </div>
