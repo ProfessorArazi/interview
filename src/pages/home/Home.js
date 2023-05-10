@@ -6,7 +6,10 @@ import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import { useRef, useState } from "react";
 import { handleSpeak } from "../../helpers/speak/handleSpeak";
 import { getCommunityHandler } from "../../helpers/http/api";
-import { updateQuestions } from "../../helpers/questionsReading/questionsAsking";
+import {
+  resetHandler,
+  updateQuestions,
+} from "../../helpers/questionsReading/questionsAsking";
 
 const Home = ({
   setPage,
@@ -29,7 +32,10 @@ const Home = ({
   const [speed, setSpeed] = useState("1");
 
   const getCommunity = async () => {
-    if (community.length > 0) return setCommunitySubjects([]);
+    if (community.length > 0) {
+      resetHandler(showDefaultSubjects, false);
+      return setCommunitySubjects([]);
+    }
     const questions = await getCommunityHandler();
     const subjects = updateQuestions(questions.questions, true);
     setCommunitySubjects(subjects);
@@ -137,7 +143,10 @@ const Home = ({
 
             <button
               disabled={disableButton}
-              onClick={() => setShowDefaultSubjects((prev) => !prev)}
+              onClick={() => {
+                resetHandler(!showDefaultSubjects, !!community.length);
+                setShowDefaultSubjects((prev) => !prev);
+              }}
             >
               {showDefaultSubjects ? "Remove Default" : "Show Default"}
             </button>

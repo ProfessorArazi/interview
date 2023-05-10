@@ -29,15 +29,18 @@ const mappingQuestions = (questions, custom) => {
 export let customTypes = {};
 export let communityTypes = {};
 
-let questionsTypes = {
+let defaultTypes = {
   React: mappingQuestions(reactQuestions),
   "React Native": mappingQuestions(reactNativeQuestions),
   JS: mappingQuestions(jsQuestions),
   Personal: mappingQuestions(personalQuestions),
 };
 
-const types = [...Object.keys(questionsTypes)];
+let questionsTypes = {
+  ...defaultTypes,
+};
 
+let types = [...Object.keys(questionsTypes)];
 export const updateQuestions = (data, community) => {
   const obj = {};
   data.forEach((q) => {
@@ -47,14 +50,31 @@ export const updateQuestions = (data, community) => {
   if (community) {
     communityTypes = { ...obj };
   } else customTypes = { ...obj };
-  questionsTypes = { ...questionsTypes, ...customTypes, ...communityTypes };
+  questionsTypes = { ...defaultTypes, ...customTypes, ...communityTypes };
+  types = [...Object.keys(questionsTypes)];
   return Object.keys(obj);
+};
+
+export const resetHandler = (showDefault, community) => {
+  if (showDefault && community) {
+    questionsTypes = { ...defaultTypes, ...customTypes, ...communityTypes };
+  } else if (!showDefault && !community) {
+    questionsTypes = { ...customTypes };
+  } else if (!showDefault) {
+    questionsTypes = { ...communityTypes, ...customTypes };
+  } else if (!community) {
+    questionsTypes = { ...defaultTypes, ...customTypes };
+  }
+
+  console.log(questionsTypes);
+  types = [...Object.keys(questionsTypes)];
 };
 
 export const addQuestions = (data) => {
   const questions = [...mappingQuestions(data.questions, true)];
   questionsTypes[data.subject] = questions;
   customTypes[data.subject] = [...questionsTypes[data.subject]];
+  types = [...Object.keys(questionsTypes)];
 };
 
 export const askQuestion = (type) => {

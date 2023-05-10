@@ -74,6 +74,7 @@
   border-radius: 8px;
   cursor: pointer;
   overflow: auto;
+  height: 60px;
 }
 
 .custom {

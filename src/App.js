@@ -9,7 +9,7 @@ import { fetchQuestions } from "./helpers/http/api";
 
 function App() {
   const [page, setPage] = useState("home");
-  const subjects = ["React", "React Native", "JS", "Personal", "Random"];
+  const subjects = ["React", "React Native", "JS", "Personal"];
   const [customSubjects, setCustomSubjects] = useState([]);
   const [communitySubjects, setCommunitySubjects] = useState([]);
   const [showDefaultSubjects, setShowDefaultSubjects] = useState(true);
@@ -57,8 +57,8 @@ function App() {
           screenWidth={screenWidth}
           subjects={
             showDefaultSubjects
-              ? [...customSubjects, ...subjects, ...communitySubjects]
-              : [...customSubjects, ...communitySubjects]
+              ? ["Random", ...customSubjects, ...subjects, ...communitySubjects]
+              : ["Random", ...customSubjects, ...communitySubjects]
           }
           setPage={setPage}
           setShowDefaultSubjects={setShowDefaultSubjects}
