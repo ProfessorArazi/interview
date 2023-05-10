@@ -5,14 +5,18 @@ import WebcamComponent from "../../components/webcam/WebcamComponent";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import { useRef, useState } from "react";
 import { handleSpeak } from "../../helpers/speak/handleSpeak";
+import { getCommunityHandler } from "../../helpers/http/api";
+import { updateQuestions } from "../../helpers/questionsReading/questionsAsking";
 
 const Home = ({
   setPage,
   subjects,
   setShowDefaultSubjects,
   showDefaultSubjects,
+  setCommunitySubjects,
   screenWidth,
   isAdmin,
+  community,
 }) => {
   const playerRef = useRef();
 
@@ -23,6 +27,13 @@ const Home = ({
   const [firstCamera, setFirstCamera] = useState(true);
   const [loading, setLoading] = useState(false);
   const [speed, setSpeed] = useState("1");
+
+  const getCommunity = async () => {
+    if (community.length > 0) return setCommunitySubjects([]);
+    const questions = await getCommunityHandler();
+    const subjects = updateQuestions(questions.questions, true);
+    setCommunitySubjects(subjects);
+  };
 
   const speakHandler = async (type) => {
     const speakData = {
@@ -113,17 +124,21 @@ const Home = ({
         <button disabled={disableButton} onClick={() => setPage("form")}>
           Custom
         </button>
+
         <button
           disabled={disableButton}
           onClick={() => setShowDefaultSubjects((prev) => !prev)}
         >
           {showDefaultSubjects ? "Remove Default" : "Show Default"}
         </button>
+        <button disabled={disableButton} onClick={getCommunity}>
+          Community
+        </button>
       </div>
       <div className="actions">
         {subjects.map((subject) => (
           <button
-            key={subject}
+            key={Math.random()}
             disabled={disableButton}
             onClick={() => speakHandler(subject)}
           >

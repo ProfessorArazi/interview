@@ -27,6 +27,7 @@ const mappingQuestions = (questions, custom) => {
 };
 
 export let customTypes = {};
+export let communityTypes = {};
 
 let questionsTypes = {
   React: mappingQuestions(reactQuestions),
@@ -37,14 +38,16 @@ let questionsTypes = {
 
 const types = [...Object.keys(questionsTypes)];
 
-export const updateQuestions = (data) => {
+export const updateQuestions = (data, community) => {
   const obj = {};
   data.forEach((q) => {
     obj[q.subject] = q.questions;
     if (!types.includes(q.subject)) types.push(q.subject);
   });
-  customTypes = { ...obj };
-  questionsTypes = { ...questionsTypes, ...customTypes };
+  if (community) {
+    communityTypes = { ...obj };
+  } else customTypes = { ...obj };
+  questionsTypes = { ...questionsTypes, ...customTypes, ...communityTypes };
   return Object.keys(obj);
 };
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { httpRequest } from "../../helpers/http/httpRequest";
 import { MdArrowForward, MdCheckCircle } from "react-icons/md";
 import { AiFillCloseCircle } from "react-icons/ai";
 import "./Admin.css";
+import { approveQuestions, getInvalidQuestions } from "../../helpers/http/api";
 
 const Admin = ({ closeAdmin, screenWidth }) => {
   const [questions, setQuestions] = useState([]);
@@ -10,19 +10,7 @@ const Admin = ({ closeAdmin, screenWidth }) => {
   const [rejectedQuestions, setRejectedQuestions] = useState([]);
 
   useEffect(() => {
-    const getInvalidQuestions = async () => {
-      const data = JSON.parse(localStorage.getItem("data"));
-      if (data) {
-        const questions = await httpRequest({
-          method: "post",
-          url: "/community",
-          data: { ...data, valid: false },
-        });
-        setQuestions(questions.questions);
-      }
-    };
-
-    getInvalidQuestions();
+    getInvalidQuestions(setQuestions);
   }, []);
 
   const cancelHandler = (id, data, setData) => {
@@ -33,18 +21,7 @@ const Admin = ({ closeAdmin, screenWidth }) => {
   };
 
   const submitHandler = () => {
-    const user = JSON.parse(localStorage.getItem("data"));
-
-    httpRequest({
-      method: "post",
-      url: "/approveQuestions",
-      data: {
-        approved: approvedQuestions,
-        rejected: rejectedQuestions,
-        ...user,
-      },
-    });
-    closeAdmin();
+    approveQuestions(approvedQuestions, rejectedQuestions, closeAdmin);
   };
 
   return (
@@ -119,12 +96,14 @@ const Admin = ({ closeAdmin, screenWidth }) => {
               </div>
             </div>
           ))}
-      <button onClick={submitHandler} className="admin-submit">
-        Submit
-      </button>
         </div>
       )}
-      </>
+      {questions.length > 0 && (
+        <button onClick={submitHandler} className="admin-submit">
+          Submit
+        </button>
+      )}
+    </>
   );
 };
 

@@ -3,15 +3,15 @@ import "./App.css";
 import Home from "./pages/home/Home";
 import AddQuestionsForm from "./components/forms/AddQuestionsForm";
 import Login from "./components/forms/Login";
-import { httpRequest } from "./helpers/http/httpRequest";
-import { updateQuestions } from "./helpers/questionsReading/questionsAsking";
 import LoadingSpinner from "./components/loading/LoadingSpinner";
 import Admin from "./pages/admin/Admin";
+import { fetchQuestions } from "./helpers/http/api";
 
 function App() {
   const [page, setPage] = useState("home");
   const subjects = ["React", "React Native", "JS", "Personal", "Random"];
   const [customSubjects, setCustomSubjects] = useState([]);
+  const [communitySubjects, setCommunitySubjects] = useState([]);
   const [showDefaultSubjects, setShowDefaultSubjects] = useState(true);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
   const [isLoading, setIsLoading] = useState(false);
@@ -22,25 +22,7 @@ function App() {
   };
 
   useEffect(() => {
-    const fetchQuestions = async () => {
-      const data = JSON.parse(localStorage.getItem("data"));
-      if (data) {
-        setIsLoading(true);
-        const res = await httpRequest({
-          method: "post",
-          url: "/getQuestions",
-          data,
-        });
-        const subjects = updateQuestions(res.questions);
-        setCustomSubjects(subjects);
-        if (res.isAdmin) {
-          setIsAdmin(true);
-          setPage("admin");
-        }
-        setIsLoading(false);
-      }
-    };
-    fetchQuestions();
+    fetchQuestions(setIsLoading, setCustomSubjects, setIsAdmin, setPage);
   }, []);
 
   useEffect(() => {
@@ -73,14 +55,12 @@ function App() {
         <Home
           isAdmin={isAdmin}
           screenWidth={screenWidth}
-          subjects={
-            showDefaultSubjects
-              ? [...subjects, ...customSubjects]
-              : customSubjects
-          }
+          subjects={[...customSubjects, ...subjects, ...communitySubjects]}
           setPage={setPage}
           setShowDefaultSubjects={setShowDefaultSubjects}
           showDefaultSubjects={showDefaultSubjects}
+          setCommunitySubjects={setCommunitySubjects}
+          community={communitySubjects}
         />
       )}
     </div>

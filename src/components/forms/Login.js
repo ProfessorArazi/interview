@@ -2,12 +2,9 @@ import React, { useEffect, useState } from "react";
 import "@lottiefiles/lottie-player";
 import { MdArrowForward } from "react-icons/md";
 import "./Login.css";
-import { httpRequest } from "../../helpers/http/httpRequest";
-import {
-  customTypes,
-  updateQuestions,
-} from "../../helpers/questionsReading/questionsAsking";
+import { customTypes } from "../../helpers/questionsReading/questionsAsking";
 import LoadingSpinner from "../loading/LoadingSpinner";
+import { loginOrSignup } from "../../helpers/http/api";
 
 const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
   const [signup, setSignup] = useState(false);
@@ -32,30 +29,15 @@ const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
       questions: q[1],
     }));
     setIsLoading(true);
-    const data = await httpRequest({
-      method: "post",
-      url: `/users${signup ? "" : "/login"}`,
-      data: { ...values, questions: customQuestions },
-    });
-    if (!data.token) {
-      setIsLoading(false);
-      return "error";
-    }
-    if (!signup) {
-      const subjects = updateQuestions(data.questions);
-      setCustomSubjects(subjects);
-    }
-
-    localStorage.setItem(
-      "data",
-      JSON.stringify({ token: data.token, id: data.id })
+    loginOrSignup(
+      signup,
+      values,
+      customQuestions,
+      setIsLoading,
+      setCustomSubjects,
+      setIsAdmin,
+      setPage
     );
-
-    if (data.isAdmin) {
-      setIsAdmin(true);
-    }
-
-    setPage(data.isAdmin ? "admin" : "home");
   };
 
   return isLoading ? (
