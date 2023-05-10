@@ -4,7 +4,9 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding-bottom: 30px;
 }
+
 
 .zoom {
   display: flex;
