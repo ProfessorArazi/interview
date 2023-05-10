@@ -55,7 +55,11 @@ function App() {
         <Home
           isAdmin={isAdmin}
           screenWidth={screenWidth}
-          subjects={[...customSubjects, ...subjects, ...communitySubjects]}
+          subjects={
+            showDefaultSubjects
+              ? [...customSubjects, ...subjects, ...communitySubjects]
+              : [...customSubjects, ...communitySubjects]
+          }
           setPage={setPage}
           setShowDefaultSubjects={setShowDefaultSubjects}
           showDefaultSubjects={showDefaultSubjects}
