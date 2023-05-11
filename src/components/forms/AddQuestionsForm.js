@@ -14,7 +14,7 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
   const [community, setCommunity] = useState(false);
   let disabled = !values.subject.trim() || !values.questions.trim();
 
-  const addQuestionsHandler = (e) => {
+  const addQuestionsHandler = async (e) => {
     e.preventDefault();
     if (disabled) {
       return setErrors({
@@ -22,10 +22,8 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
         questions: !values.questions.trim(),
       });
     }
-    addQuestions(values);
-    setCustomSubjects((prev) =>
-      prev.includes(values.subject) ? prev : [...prev, values.subject]
-    );
+    const customSubject = await addQuestions(values);
+    setCustomSubjects((prev) => [...prev, customSubject]);
     const data = JSON.parse(localStorage.getItem("data"));
     if (data || community) {
       addQuestionsRequest(data, values, community);

@@ -6,6 +6,7 @@ import reactQuestions from "./questions/reactQuestions";
 import reactNativeQuestions from "./questions/reactNativeQuestions";
 import jsQuestions from "./questions/jsQuestions";
 import personalQuestions from "./questions/personalQuestions";
+import { generateUniqueId } from "./generateUniqueId";
 
 const mappingQuestions = (questions, custom) => {
   let modifiedQuestions;
@@ -44,8 +45,9 @@ let types = [...Object.keys(questionsTypes)];
 export const updateQuestions = (data, community) => {
   const obj = {};
   data.forEach((q) => {
-    obj[q.subject] = q.questions;
-    if (!types.includes(q.subject)) types.push(q.subject);
+    const uniqueSubject = generateUniqueId(q.subject);
+    obj[uniqueSubject] = q.questions;
+    types.push(uniqueSubject);
   });
   if (community) {
     communityTypes = { ...obj };
@@ -66,15 +68,16 @@ export const resetHandler = (showDefault, community) => {
     questionsTypes = { ...defaultTypes, ...customTypes };
   }
 
-  console.log(questionsTypes);
   types = [...Object.keys(questionsTypes)];
 };
 
 export const addQuestions = (data) => {
   const questions = [...mappingQuestions(data.questions, true)];
-  questionsTypes[data.subject] = questions;
-  customTypes[data.subject] = [...questionsTypes[data.subject]];
+  const uniqueSubject = generateUniqueId(data.subject);
+  questionsTypes[uniqueSubject] = questions;
+  customTypes[uniqueSubject] = [...questionsTypes[uniqueSubject]];
   types = [...Object.keys(questionsTypes)];
+  return uniqueSubject;
 };
 
 export const askQuestion = (type) => {

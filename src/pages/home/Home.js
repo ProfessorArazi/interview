@@ -155,15 +155,18 @@ const Home = ({
             </button>
           </div>
           <div className="actions">
-            {subjects.map((subject) => (
-              <button
-                key={Math.random()}
-                disabled={disableButton}
-                onClick={() => speakHandler(subject)}
-              >
-                {subject}
-              </button>
-            ))}
+            {subjects.map((subject) => {
+              const idIndex = subject.lastIndexOf("-");
+              return (
+                <button
+                  key={Math.random()}
+                  disabled={disableButton}
+                  onClick={() => speakHandler(subject)}
+                >
+                  {idIndex === -1 ? subject : subject.slice(0, idIndex)}
+                </button>
+              );
+            })}
           </div>
         </>
       )}
