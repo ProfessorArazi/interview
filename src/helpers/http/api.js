@@ -73,7 +73,7 @@ export const loginOrSignup = async (
   setPage(data.isAdmin ? "admin" : "home");
 };
 
-export const getInvalidQuestions = async (setQuestions) => {
+export const getInvalidQuestions = async (setQuestions, setIsLoading) => {
   if (user) {
     const questions = await httpRequest({
       method: "post",
@@ -81,6 +81,7 @@ export const getInvalidQuestions = async (setQuestions) => {
       data: { ...user, valid: false },
     });
     setQuestions(questions.questions);
+    setIsLoading(false);
   }
 };
 

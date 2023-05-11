@@ -3,14 +3,17 @@ import { MdArrowForward, MdCheckCircle } from "react-icons/md";
 import { AiFillCloseCircle } from "react-icons/ai";
 import "./Admin.css";
 import { approveQuestions, getInvalidQuestions } from "../../helpers/http/api";
+import LoadingSpinner from "../../components/loading/LoadingSpinner";
 
 const Admin = ({ closeAdmin, screenWidth }) => {
   const [questions, setQuestions] = useState([]);
   const [approvedQuestions, setApprovedQuestions] = useState([]);
   const [rejectedQuestions, setRejectedQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    getInvalidQuestions(setQuestions);
+    setIsLoading(true);
+    getInvalidQuestions(setQuestions, setIsLoading);
   }, []);
 
   const cancelHandler = (id, data, setData) => {
@@ -32,7 +35,9 @@ const Admin = ({ closeAdmin, screenWidth }) => {
         </button>
       </div>
       <h1 className="title">Admin</h1>
-      {questions.length === 0 ? (
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : questions.length === 0 ? (
         <h3>No Pending Questions</h3>
       ) : (
         <div className="container">

@@ -65,14 +65,14 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
             setValues((prev) => ({ ...prev, questions: e.target.value }));
           }}
         />
-        <div>
+        <label className="community">
           <input
             type="checkbox"
             onChange={() => setCommunity((prev) => !prev)}
             value={community}
           />
-          <p>I would like to share this questions with the community</p>
-        </div>
+          I would like to share the questions with the community
+        </label>
         <div className="button-container">
           <button disabled={disabled}>Submit</button>
         </div>
