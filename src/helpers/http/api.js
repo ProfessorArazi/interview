@@ -1,7 +1,7 @@
 import { updateQuestions } from "../questionsReading/questionsAsking";
 import { httpRequest } from "./httpRequest";
 
-const user = JSON.parse(localStorage.getItem("data"));
+export let user = JSON.parse(localStorage.getItem("data"));
 
 export const fetchQuestions = async (
   setIsLoading,
@@ -71,6 +71,7 @@ export const loginOrSignup = async (
   }
 
   setPage(data.isAdmin ? "admin" : "home");
+  user = JSON.parse(localStorage.getItem("data"));
 };
 
 export const getInvalidQuestions = async (setQuestions, setIsLoading) => {
@@ -81,8 +82,8 @@ export const getInvalidQuestions = async (setQuestions, setIsLoading) => {
       data: { ...user, valid: false },
     });
     setQuestions(questions.questions);
-    setIsLoading(false);
   }
+  setIsLoading(false);
 };
 
 export const approveQuestions = async (

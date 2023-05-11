@@ -3,7 +3,7 @@ import { useState } from "react";
 import { addQuestions } from "../../helpers/questionsReading/questionsAsking";
 import "./AddQuestionsForm.css";
 import { MdArrowForward } from "react-icons/md";
-import { addQuestionsRequest } from "../../helpers/http/api";
+import { addQuestionsRequest, user } from "../../helpers/http/api";
 
 const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
   const [values, setValues] = useState({ subject: "", questions: "" });
@@ -52,6 +52,20 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
             setValues((prev) => ({ ...prev, subject: e.target.value }));
           }}
         />
+        <p className="format">
+          על מנת שהמערכת תוכל לקרוא את השאלות שלכם, עליכם לרדת שורה לאחר כל שאלה
+          <br /> דוגמה: <br /> ספרי לי על עצמך <br /> מה החוזקות שלך? <br />{" "}
+          מדוע את רוצה לעבוד בחברה שלנו?
+          {!user && (
+            <>
+              <br />
+              <br />
+            </>
+          )}
+          {!user &&
+            ` אם אתם רוצים שהמערכת תשמור את השאלות שלכם לפעמים הבאות אתם צריכים
+          להירשם לאתר דרך האייקון של האיש בדף הבית`}
+        </p>
         <textarea
           className={errors.questions && "error"}
           dir={

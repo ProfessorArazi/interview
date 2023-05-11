@@ -66,12 +66,21 @@
   bottom: 1px;
 }
 
+.format {
+  width: 32%;
+  margin: 0 0 20px 0;
+  color: #fff;
+  text-align: right;
+  direction: rtl;
+}
+
 @media (max-width: 768px) {
   .form input,
   .form textarea {
     width: 80%;
   }
-  .button-container {
+  .button-container,
+  .format {
     width: 85%;
   }
   .back {
