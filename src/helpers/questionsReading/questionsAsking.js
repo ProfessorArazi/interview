@@ -95,7 +95,9 @@ export const askQuestion = (type) => {
       return askQuestion(type);
     }
     return `No ${
-      type === "reactNative" ? "react native" : type
+      type === "reactNative"
+        ? "react native"
+        : type.slice(0, type.lastIndexOf("-"))
     } questions left`;
   }
   questions.splice(i, 1);
