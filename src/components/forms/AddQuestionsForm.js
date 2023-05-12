@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { addQuestions } from "../../helpers/questionsReading/questionsAsking";
 import "./AddQuestionsForm.css";
 import { MdArrowForward } from "react-icons/md";
-import { addQuestionsRequest, user } from "../../helpers/http/api";
+import { ApiContext } from "../../store/api-context";
 
 const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
+  const { addQuestionsRequest, user } = useContext(ApiContext);
+
   const [values, setValues] = useState({ subject: "", questions: "" });
   const [errors, setErrors] = useState({
     subject: null,

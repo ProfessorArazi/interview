@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import "@lottiefiles/lottie-player";
 import { MdSubtitles, MdCameraAlt, MdPerson } from "react-icons/md";
 import WebcamComponent from "../../components/webcam/WebcamComponent";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import { useRef, useState } from "react";
 import { handleSpeak } from "../../helpers/speak/handleSpeak";
-import { getCommunityHandler } from "../../helpers/http/api";
 import {
   resetHandler,
   updateQuestions,
 } from "../../helpers/questionsReading/questionsAsking";
+import { ApiContext } from "../../store/api-context";
 
 const Home = ({
   setPage,
@@ -21,6 +21,7 @@ const Home = ({
   isAdmin,
   community,
 }) => {
+  const { getCommunityHandler } = useContext(ApiContext);
   const playerRef = useRef();
 
   const [question, setQuestion] = useState("");
@@ -36,8 +37,9 @@ const Home = ({
       resetHandler(showDefaultSubjects, false);
       return setCommunitySubjects([]);
     }
-    const questions = await getCommunityHandler();
-    const subjects = updateQuestions(questions.questions, true);
+    const data = await getCommunityHandler();
+    if (!data) return;
+    const subjects = updateQuestions(data.questions, true);
     setCommunitySubjects(subjects);
   };
 

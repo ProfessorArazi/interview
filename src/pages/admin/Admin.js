@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdArrowForward, MdCheckCircle } from "react-icons/md";
 import { AiFillCloseCircle } from "react-icons/ai";
 import "./Admin.css";
-import { approveQuestions, getInvalidQuestions } from "../../helpers/http/api";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";
+import { ApiContext } from "../../store/api-context";
 
 const Admin = ({ closeAdmin, screenWidth }) => {
+  const { getInvalidQuestions, approveQuestions } = useContext(ApiContext);
+
   const [questions, setQuestions] = useState([]);
   const [approvedQuestions, setApprovedQuestions] = useState([]);
   const [rejectedQuestions, setRejectedQuestions] = useState([]);
@@ -14,7 +16,7 @@ const Admin = ({ closeAdmin, screenWidth }) => {
   useEffect(() => {
     setIsLoading(true);
     getInvalidQuestions(setQuestions, setIsLoading);
-  }, []);
+  }, [getInvalidQuestions]);
 
   const cancelHandler = (id, data, setData) => {
     const temp = [...data];
@@ -24,6 +26,9 @@ const Admin = ({ closeAdmin, screenWidth }) => {
   };
 
   const submitHandler = () => {
+    if (approvedQuestions.length === 0 && rejectedQuestions.length === 0) {
+      return closeAdmin();
+    }
     approveQuestions(approvedQuestions, rejectedQuestions, closeAdmin);
   };
 

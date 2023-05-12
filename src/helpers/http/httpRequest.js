@@ -9,7 +9,7 @@ export const httpRequest = async (config) => {
       return res.data;
     })
     .catch((error) => {
-      return error;
+      return error?.response?.data || error;
     });
   return data;
 };

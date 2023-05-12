@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "@lottiefiles/lottie-player";
 import { MdArrowForward } from "react-icons/md";
 import "./Login.css";
 import { customTypes } from "../../helpers/questionsReading/questionsAsking";
 import LoadingSpinner from "../loading/LoadingSpinner";
-import { loginOrSignup } from "../../helpers/http/api";
+import { ApiContext } from "../../store/api-context";
 
 const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
+  const { setError, loginOrSignup } = useContext(ApiContext);
+
   const [signup, setSignup] = useState(false);
   const [isLottieLoaded, setIsLottieLoaded] = useState(false);
   const [values, setValues] = useState({
@@ -24,6 +26,7 @@ const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (!values.userName.trim() || !values.password.trim()) return;
     const customQuestions = Object.entries(customTypes).map((q) => ({
       subject: q[0],
       questions: q[1],
@@ -36,7 +39,8 @@ const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
       setIsLoading,
       setCustomSubjects,
       setIsAdmin,
-      setPage
+      setPage,
+      setError
     );
   };
 
@@ -58,12 +62,12 @@ const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
           screenWidth > 768
             ? {
                 width: "200px",
-                "margin-left": "1%",
+                "marginLeft": "1%",
               }
             : {
                 flex: 1,
                 width: "50%",
-                "margin-left": "5%",
+                "marginLeft": "5%",
                 height: "100px",
               }
         }
@@ -92,7 +96,11 @@ const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
               Sign {signup ? "In" : "Up"}
             </h4>
             <div className="button-container">
-              <button>{signup ? "Register" : "Login"}</button>
+              <button
+                disabled={!values.userName.trim() || !values.password.trim()}
+              >
+                {signup ? "Register" : "Login"}
+              </button>
             </div>
           </form>
         </>
