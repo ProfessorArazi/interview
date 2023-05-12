@@ -62,12 +62,12 @@ const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
           screenWidth > 768
             ? {
                 width: "200px",
-                "marginLeft": "1%",
+                marginLeft: "1%",
               }
             : {
                 flex: 1,
                 width: "50%",
-                "marginLeft": "5%",
+                marginLeft: "5%",
                 height: "100px",
               }
         }
@@ -77,12 +77,14 @@ const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
           <h1 className="title login-title">Sign {signup ? "Up" : "In"}</h1>
           <form className="form login-form" onSubmit={submitHandler}>
             <input
+              value={values.userName}
               placeholder="user name"
               onChange={(e) =>
                 setValues((prev) => ({ ...prev, userName: e.target.value }))
               }
             />
             <input
+              value={values.password}
               type="password"
               placeholder="password"
               onChange={(e) =>
