@@ -3,12 +3,14 @@ import { useState } from "react";
 import {
   addQuestions,
   customWithIds,
+  deleteQuestion,
   editQuestion,
   getCustomQuestionsForEdit,
 } from "../../helpers/questionsReading/questionsAsking";
 import "./AddQuestionsForm.css";
 import { MdArrowForward } from "react-icons/md";
 import { ApiContext } from "../../store/api-context";
+import { DeleteConfirmation } from "../ui/DeleteConfirmation";
 
 const AddQuestionsForm = ({
   closeForm,
@@ -25,6 +27,7 @@ const AddQuestionsForm = ({
   });
   const [community, setCommunity] = useState(false);
   const [pickedSubjectForEdit, setPickedSubjectForEdit] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   let disabled = !values.subject.trim() || !values.questions.trim();
 
   const addQuestionsHandler = async (e) => {
@@ -47,7 +50,7 @@ const AddQuestionsForm = ({
             custom.subject ===
             pickedSubjectForEdit.slice(0, pickedSubjectForEdit.lastIndexOf("-"))
         )._id;
-        editQuestions(data, values , subjectId);
+        editQuestions(data, values, subjectId);
       }
     } else {
       const customSubject = addQuestions(values);
@@ -67,6 +70,23 @@ const AddQuestionsForm = ({
       questions,
     });
     setPickedSubjectForEdit(type);
+  };
+
+  const deleteQuestionsHandler = () => {
+    deleteQuestion(pickedSubjectForEdit);
+    const temp = [...customSubjects];
+    temp.splice(temp.indexOf(pickedSubjectForEdit), 1);
+    setCustomSubjects(temp);
+    const data = JSON.parse(localStorage.getItem("data"));
+    if (data) {
+      const subjectId = customWithIds.find(
+        (custom) =>
+          custom.subject ===
+          pickedSubjectForEdit.slice(0, pickedSubjectForEdit.lastIndexOf("-"))
+      )._id;
+      editQuestions(data, null, subjectId);
+    }
+    closeForm();
   };
 
   return (
@@ -155,9 +175,23 @@ const AddQuestionsForm = ({
           </label>
           <div className="button-container">
             <button disabled={disabled}>Submit</button>
-            {pickedSubjectForEdit && <button className="delete">Delete</button>}
+            {pickedSubjectForEdit && (
+              <button
+                type="button"
+                onClick={() => setShowDeleteConfirmation(true)}
+                className="delete"
+              >
+                Delete
+              </button>
+            )}
           </div>
         </form>
+      )}
+      {showDeleteConfirmation && (
+        <DeleteConfirmation
+          onDelete={deleteQuestionsHandler}
+          setShowDeleteConfirmation={setShowDeleteConfirmation}
+        />
       )}
     </>
   );

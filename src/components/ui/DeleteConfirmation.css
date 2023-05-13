@@ -1,0 +1,28 @@
+.confirmation-popup {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid gray;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+
+.confirmation-popup .message {
+  margin-bottom: 20px;
+}
+
+.confirmation-popup button {
+  flex: 1;
+  background-color: #282c34;
+  color: #fff;
+}
+
+.delete-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+}

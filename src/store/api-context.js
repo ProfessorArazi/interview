@@ -163,7 +163,9 @@ export const ApiContextProvider = ({ children }) => {
       url: "/editQuestions",
       data: {
         ...data,
-        questions: [{ ...values, questions: values.questions.split("\n") }],
+        questions: !values
+          ? null
+          : { ...values, questions: values.questions.split("\n") },
         subjectId,
       },
     });

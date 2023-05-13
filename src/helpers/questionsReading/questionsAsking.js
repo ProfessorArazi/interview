@@ -110,8 +110,12 @@ export const getCustomQuestionsForEdit = (type) => {
   return customTypes[type].join("\n");
 };
 
-export const editQuestion = (data, subject) => {
+export const deleteQuestion = (subject) => {
   delete questionsTypes[subject];
   delete customTypes[subject];
+};
+
+export const editQuestion = (data, subject) => {
+  deleteQuestion(subject);
   return addQuestions(data);
 };
