@@ -117,7 +117,7 @@ const Home = ({
               : {
                   flex: 1,
                   width: "auto",
-                  "margin-left": "5%",
+                  "marginLeft": "5%",
                   height: "250px",
                 }
           }
