@@ -1,4 +1,7 @@
 export const generateUniqueId = (str) => {
-  const randomStr = Math.random().toString(36).substring(2, 8);
-  return str + "-" + randomStr;
+  let randomStr = "";
+  while (randomStr.length < 6) {
+    randomStr += Math.random().toString(36).substring(2, 8);
+  }
+  return str + "-" + randomStr.slice(0, 6);
 };

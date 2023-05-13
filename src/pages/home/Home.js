@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "@lottiefiles/lottie-player";
-import { MdSubtitles, MdCameraAlt, MdPerson } from "react-icons/md";
+import { MdSubtitles, MdCameraAlt, MdPerson, MdEdit } from "react-icons/md";
 import WebcamComponent from "../../components/webcam/WebcamComponent";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import { useRef, useState } from "react";
@@ -20,6 +20,7 @@ const Home = ({
   screenWidth,
   isAdmin,
   community,
+  customSubjects,
 }) => {
   const { getCommunityHandler } = useContext(ApiContext);
   const playerRef = useRef();
@@ -93,6 +94,11 @@ const Home = ({
               <MdPerson size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
             </button>
           )}
+          {customSubjects.length > 0 && (
+            <button onClick={() => setPage("edit")}>
+              <MdEdit size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
+            </button>
+          )}
         </div>
       </div>
       <div className="zoom">
@@ -159,7 +165,7 @@ const Home = ({
                 const idIndex = subject.lastIndexOf("-");
                 return (
                   <button
-                    key={Math.random()}
+                    key={subject}
                     disabled={disableButton}
                     onClick={() => speakHandler(subject)}
                   >

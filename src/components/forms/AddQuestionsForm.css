@@ -29,7 +29,8 @@
 .button-container {
   display: flex;
   width: 32%;
-  justify-content: flex-end;
+  justify-content: space-between;
+  flex-direction: row-reverse;
 }
 
 .button-container button {
@@ -98,6 +99,12 @@
   color: #fff;
   text-align: right;
   direction: rtl;
+}
+
+.delete {
+  background-color: #cf222e !important;
+  color: #fff !important;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {

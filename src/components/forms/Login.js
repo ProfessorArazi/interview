@@ -28,7 +28,7 @@ const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
     e.preventDefault();
     if (!values.userName.trim() || !values.password.trim()) return;
     const customQuestions = Object.entries(customTypes).map((q) => ({
-      subject: q[0],
+      subject: q[0].slice(0, q[0].lastIndexOf("-")),
       questions: q[1],
     }));
     setIsLoading(true);

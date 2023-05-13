@@ -1,6 +1,9 @@
 import { createContext } from "react";
 import { toast } from "react-toastify";
-import { updateQuestions } from "../helpers/questionsReading/questionsAsking";
+import {
+  customWithIds,
+  updateQuestions,
+} from "../helpers/questionsReading/questionsAsking";
 import { httpRequest } from "../helpers/http/httpRequest";
 
 export const ApiContext = createContext({
@@ -11,6 +14,7 @@ export const ApiContext = createContext({
   getInvalidQuestions: (data) => {},
   approveQuestions: (data) => {},
   getCommunityHandler: (data) => {},
+  editQuestions: (data) => {},
 });
 
 export const ApiContextProvider = ({ children }) => {
@@ -58,7 +62,7 @@ export const ApiContextProvider = ({ children }) => {
   };
 
   const addQuestionsRequest = async (data, values, community) => {
-    httpRequest({
+    const res = await httpRequest({
       method: "post",
       url: "/addQuestions",
       data: {
@@ -67,6 +71,7 @@ export const ApiContextProvider = ({ children }) => {
         community,
       },
     });
+    customWithIds.push(res.question);
   };
 
   const loginOrSignup = async (
@@ -92,10 +97,9 @@ export const ApiContextProvider = ({ children }) => {
       );
       return setIsLoading(false);
     }
-    if (!signup) {
-      const subjects = updateQuestions(data.questions);
-      setCustomSubjects(subjects);
-    }
+    console.log(data.questions);
+    const subjects = updateQuestions(data.questions);
+    setCustomSubjects(subjects);
 
     localStorage.setItem(
       "data",
@@ -153,6 +157,18 @@ export const ApiContextProvider = ({ children }) => {
     return questions;
   };
 
+  const editQuestions = async (data, values, subjectId) => {
+    httpRequest({
+      method: "post",
+      url: "/editQuestions",
+      data: {
+        ...data,
+        questions: [{ ...values, questions: values.questions.split("\n") }],
+        subjectId,
+      },
+    });
+  };
+
   const value = {
     setError,
     fetchQuestions,
@@ -161,6 +177,7 @@ export const ApiContextProvider = ({ children }) => {
     getInvalidQuestions,
     approveQuestions,
     getCommunityHandler,
+    editQuestions,
     user,
   };
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;

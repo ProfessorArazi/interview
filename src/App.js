@@ -47,11 +47,12 @@ function App() {
               closeAdmin={() => setPage("home")}
               screenWidth={screenWidth}
             />
-          ) : page === "form" ? (
+          ) : page === "form" || page === "edit" ? (
             <AddQuestionsForm
               screenWidth={screenWidth}
               setCustomSubjects={setCustomSubjects}
               closeForm={() => setPage("home")}
+              customSubjects={page === "edit" ? customSubjects : null}
             />
           ) : page === "login" ? (
             <Login
@@ -62,6 +63,7 @@ function App() {
             />
           ) : (
             <Home
+              customSubjects={customSubjects}
               isAdmin={isAdmin}
               screenWidth={screenWidth}
               subjects={
