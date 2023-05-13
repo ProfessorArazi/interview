@@ -14,14 +14,13 @@ export const ApiContext = createContext({
 });
 
 export const ApiContextProvider = ({ children }) => {
-
   let user = JSON.parse(localStorage.getItem("data"));
 
   const setError = (message) =>
     toast.error(message, {
       position: "top-left",
       autoClose: 3000,
-      hideProgressBar: false,
+      hideProgressBar: true,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,

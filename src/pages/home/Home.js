@@ -90,10 +90,7 @@ const Home = ({
           </button>
           {(!localStorage.getItem("data") || isAdmin) && (
             <button onClick={() => setPage(isAdmin ? "admin" : "login")}>
-              <MdPerson
-                size={screenWidth < 768 ? 24 : 40}
-                color={showCamera ? "#D6B370" : "#fff"}
-              />
+              <MdPerson size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
             </button>
           )}
         </div>
@@ -157,18 +154,19 @@ const Home = ({
             </button>
           </div>
           <div className="actions">
-            {subjects.map((subject) => {
-              const idIndex = subject.lastIndexOf("-");
-              return (
-                <button
-                  key={Math.random()}
-                  disabled={disableButton}
-                  onClick={() => speakHandler(subject)}
-                >
-                  {idIndex === -1 ? subject : subject.slice(0, idIndex)}
-                </button>
-              );
-            })}
+            {subjects.length > 1 &&
+              subjects.map((subject) => {
+                const idIndex = subject.lastIndexOf("-");
+                return (
+                  <button
+                    key={Math.random()}
+                    disabled={disableButton}
+                    onClick={() => speakHandler(subject)}
+                  >
+                    {idIndex === -1 ? subject : subject.slice(0, idIndex)}
+                  </button>
+                );
+              })}
           </div>
         </>
       )}

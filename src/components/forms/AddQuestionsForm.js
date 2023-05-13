@@ -43,17 +43,24 @@ const AddQuestionsForm = ({ closeForm, setCustomSubjects, screenWidth }) => {
       </div>
       <h1 className="title">Custom Questions</h1>
       <form className="form" onSubmit={addQuestionsHandler}>
-        <input
-          className={errors.subject && "error"}
-          dir={
-            values.subject.match(/[a-z]/gi) || !values.subject ? "ltr" : "rtl"
-          }
-          placeholder="Subject"
-          onChange={(e) => {
-            setErrors((prev) => ({ ...prev, subject: null }));
-            setValues((prev) => ({ ...prev, subject: e.target.value }));
-          }}
-        />
+        <div className="subject-container">
+          <input
+            maxLength={14}
+            className={errors.subject && "error"}
+            dir={
+              values.subject.match(/[a-z]/gi) || !values.subject ? "ltr" : "rtl"
+            }
+            placeholder="Subject"
+            onChange={(e) => {
+              setErrors((prev) => ({ ...prev, subject: null }));
+              setValues((prev) => ({ ...prev, subject: e.target.value }));
+            }}
+          />
+          <div>
+            <p>Length: {values.subject.length}/14</p>
+          </div>
+        </div>
+
         <p className="format">
           על מנת שהמערכת תוכל לקרוא את השאלות שלכם, עליכם לרדת שורה לאחר כל שאלה
           <br /> דוגמה: <br /> ספרי לי על עצמך <br /> מה החוזקות שלך? <br />{" "}
