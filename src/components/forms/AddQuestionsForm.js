@@ -46,9 +46,7 @@ const AddQuestionsForm = ({
       setCustomSubjects(temp);
       if (data) {
         const subjectId = customWithIds.find(
-          (custom) =>
-            custom.subject ===
-            pickedSubjectForEdit.slice(0, pickedSubjectForEdit.lastIndexOf("-"))
+          (custom) => custom.subject === pickedSubjectForEdit
         )._id;
         editQuestions(data, values, subjectId, setCustomSubjects);
       }
@@ -63,14 +61,14 @@ const AddQuestionsForm = ({
     closeForm();
   };
 
-  const getQuestionsHandler = (type, subject) => {
-    const data = getCustomQuestionsForEdit(type);
+  const getQuestionsHandler = (subject) => {
+    const data = getCustomQuestionsForEdit(subject);
     setValues({
       subject,
       questions: data.questions,
     });
     // setCommunity(data.community);
-    setPickedSubjectForEdit(type);
+    setPickedSubjectForEdit(subject);
   };
 
   const deleteQuestionsHandler = () => {
@@ -81,9 +79,7 @@ const AddQuestionsForm = ({
     const data = JSON.parse(localStorage.getItem("data"));
     if (data) {
       const subjectId = customWithIds.find(
-        (custom) =>
-          custom.subject ===
-          pickedSubjectForEdit.slice(0, pickedSubjectForEdit.lastIndexOf("-"))
+        (custom) => custom.subject === pickedSubjectForEdit
       )._id;
       editQuestions(data, null, subjectId, setCustomSubjects);
     }
@@ -104,16 +100,13 @@ const AddQuestionsForm = ({
       <h1 className="title">{customSubjects ? "Edit" : "Custom"} Questions</h1>
       {customSubjects && !pickedSubjectForEdit ? (
         <div className="actions">
-          {customSubjects.map((subject) => {
-            const idIndex = subject.lastIndexOf("-");
+          {customWithIds.map((custom) => {
             return (
               <button
-                key={subject}
-                onClick={() =>
-                  getQuestionsHandler(subject, subject.slice(0, idIndex))
-                }
+                key={custom.subject}
+                onClick={() => getQuestionsHandler(custom.subject)}
               >
-                {subject.slice(0, idIndex)}
+                {custom.subject}
               </button>
             );
           })}

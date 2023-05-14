@@ -29,7 +29,7 @@ const mappingQuestions = (questions, custom) => {
 
 export let customTypes = {};
 export let communityTypes = {};
-export let customWithIds = {};
+export let customWithIds = [];
 
 let defaultTypes = {
   React: mappingQuestions(reactQuestions),
@@ -44,7 +44,7 @@ let questionsTypes = {
 
 let types = [...Object.keys(questionsTypes)];
 export const updateQuestions = (data, community) => {
-  customWithIds = data;
+  customWithIds = [...data];
   const obj = {};
   data.forEach((q) => {
     const uniqueSubject = generateUniqueId(q.subject);
@@ -102,7 +102,9 @@ export const askQuestion = (type) => {
         : type.slice(0, type.lastIndexOf("-"))
     } questions left`;
   }
-  questions.splice(i, 1);
+  const newQuestions = JSON.parse(JSON.stringify(questions));
+  newQuestions.splice(i, 1);
+  questionsTypes[questionType] = newQuestions;
   return question;
 };
 
@@ -111,7 +113,9 @@ export const getCustomQuestionsForEdit = (type) => {
   //   (custom) => custom.subject === subject
   // );
   return {
-    questions: customTypes[type].join("\n"),
+    questions: customWithIds
+      .find((custom) => custom.subject === type)
+      .questions.join("\n"),
     // community: customSubject?.sharedWithCommunity,
   };
 };
