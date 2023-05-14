@@ -88,7 +88,7 @@ export const askQuestion = (type) => {
   }
   const randomIndex = Math.floor(Math.random() * types.length);
   const questionType = type === "Random" ? types[randomIndex] : type;
-  const questions = [...questionsTypes[questionType]];
+  const questions = questionsTypes[questionType];
   let i = Math.floor(Math.random() * questions.length);
   const question = questions[i];
   if (!question) {
