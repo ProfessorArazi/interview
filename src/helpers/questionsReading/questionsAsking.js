@@ -107,7 +107,13 @@ export const askQuestion = (type) => {
 };
 
 export const getCustomQuestionsForEdit = (type) => {
-  return customTypes[type].join("\n");
+  // const customSubject = customWithIds.find(
+  //   (custom) => custom.subject === subject
+  // );
+  return {
+    questions: customTypes[type].join("\n"),
+    // community: customSubject?.sharedWithCommunity,
+  };
 };
 
 export const deleteQuestion = (subject) => {

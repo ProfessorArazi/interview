@@ -49,7 +49,7 @@ export const ApiContextProvider = ({ children }) => {
         data: user,
       });
       if (!res.questions) {
-        return somethingWentWrongHandler();
+        return;
       }
       const subjects = updateQuestions(res.questions);
       setCustomSubjects(subjects);
@@ -97,7 +97,6 @@ export const ApiContextProvider = ({ children }) => {
       );
       return setIsLoading(false);
     }
-    console.log(data.questions);
     const subjects = updateQuestions(data.questions);
     setCustomSubjects(subjects);
 
@@ -157,8 +156,8 @@ export const ApiContextProvider = ({ children }) => {
     return questions;
   };
 
-  const editQuestions = async (data, values, subjectId) => {
-    httpRequest({
+  const editQuestions = async (data, values, subjectId, setCustomSubjects) => {
+    const res = await httpRequest({
       method: "post",
       url: "/editQuestions",
       data: {
@@ -169,6 +168,8 @@ export const ApiContextProvider = ({ children }) => {
         subjectId,
       },
     });
+    const subjects = updateQuestions(res.questions);
+    setCustomSubjects(subjects);
   };
 
   const value = {

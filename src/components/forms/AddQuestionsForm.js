@@ -50,7 +50,7 @@ const AddQuestionsForm = ({
             custom.subject ===
             pickedSubjectForEdit.slice(0, pickedSubjectForEdit.lastIndexOf("-"))
         )._id;
-        editQuestions(data, values, subjectId);
+        editQuestions(data, values, subjectId, setCustomSubjects);
       }
     } else {
       const customSubject = addQuestions(values);
@@ -64,11 +64,12 @@ const AddQuestionsForm = ({
   };
 
   const getQuestionsHandler = (type, subject) => {
-    const questions = getCustomQuestionsForEdit(type);
+    const data = getCustomQuestionsForEdit(type);
     setValues({
       subject,
-      questions,
+      questions: data.questions,
     });
+    // setCommunity(data.community);
     setPickedSubjectForEdit(type);
   };
 
@@ -84,7 +85,7 @@ const AddQuestionsForm = ({
           custom.subject ===
           pickedSubjectForEdit.slice(0, pickedSubjectForEdit.lastIndexOf("-"))
       )._id;
-      editQuestions(data, null, subjectId);
+      editQuestions(data, null, subjectId, setCustomSubjects);
     }
     closeForm();
   };
@@ -92,7 +93,11 @@ const AddQuestionsForm = ({
   return (
     <>
       <div className="options back">
-        <button onClick={closeForm}>
+        <button
+          onClick={() =>
+            pickedSubjectForEdit ? setPickedSubjectForEdit(false) : closeForm()
+          }
+        >
           <MdArrowForward size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
         </button>
       </div>
@@ -165,14 +170,16 @@ const AddQuestionsForm = ({
               setValues((prev) => ({ ...prev, questions: e.target.value }));
             }}
           />
-          <label className="community">
-            <input
-              type="checkbox"
-              onChange={() => setCommunity((prev) => !prev)}
-              value={community}
-            />
-            I would like to share the questions with the community
-          </label>
+          {!pickedSubjectForEdit && (
+            <label className="community">
+              <input
+                type="checkbox"
+                onChange={() => setCommunity((prev) => !prev)}
+                checked={community}
+              />
+              I would like to share the questions with the community
+            </label>
+          )}
           <div className="button-container">
             <button disabled={disabled}>Submit</button>
             {pickedSubjectForEdit && (
