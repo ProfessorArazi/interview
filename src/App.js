@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Home from "./pages/home/Home";
 import AddQuestionsForm from "./components/forms/AddQuestionsForm";
@@ -7,7 +7,8 @@ import LoadingSpinner from "./components/loading/LoadingSpinner";
 import Admin from "./pages/admin/Admin";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ApiContext, ApiContextProvider } from "./store/api-context";
+import { ApiContextProvider } from "./store/api-context";
+import Layout from "./components/layout/Layout";
 
 function App() {
   const [page, setPage] = useState("admin");
@@ -79,32 +80,5 @@ function App() {
     </ApiContextProvider>
   );
 }
-
-const Layout = ({
-  setIsLoading,
-  setCustomSubjects,
-  setCommunitySubjects,
-  setIsAdmin,
-  setPage,
-  children,
-}) => {
-  const { fetchQuestions } = useContext(ApiContext);
-
-  useEffect(() => {
-    const firstFetchHandler = async () => {
-      await fetchQuestions(
-        setIsLoading,
-        setCustomSubjects,
-        setCommunitySubjects,
-        setIsAdmin,
-        setPage
-      );
-    };
-    setIsLoading(true);
-    firstFetchHandler();
-  }, []);
-
-  return children;
-};
 
 export default App;
