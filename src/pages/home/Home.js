@@ -1,29 +1,32 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import "@lottiefiles/lottie-player";
 import { MdSubtitles, MdCameraAlt, MdPerson, MdEdit } from "react-icons/md";
 import WebcamComponent from "../../components/webcam/WebcamComponent";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import { useRef, useState } from "react";
 import { handleSpeak } from "../../helpers/speak/handleSpeak";
-import {
-  resetHandler,
-  updateQuestions,
-} from "../../helpers/questionsReading/questionsAsking";
+import { updateQuestions } from "../../helpers/questionsReading/questionsAsking";
 import { ApiContext } from "../../store/api-context";
+import Select from "./Select";
 
 const Home = ({
   setPage,
-  subjects,
-  setShowDefaultSubjects,
-  showDefaultSubjects,
+  communitySubjects,
   setCommunitySubjects,
   screenWidth,
   isAdmin,
-  community,
   customSubjects,
 }) => {
-  const { getCommunityHandler } = useContext(ApiContext);
+  const {
+    getCommunityHandler,
+    removeCommunityHandler,
+    getCommunityKeysHandler,
+  } = useContext(ApiContext);
   const playerRef = useRef();
+  const [subjects, setSubjects] = useState([
+    ...customSubjects,
+    ...communitySubjects,
+  ]);
 
   const [question, setQuestion] = useState("");
   const [disableButton, setDisableButton] = useState(false);
@@ -32,16 +35,45 @@ const Home = ({
   const [firstCamera, setFirstCamera] = useState(true);
   const [loading, setLoading] = useState(false);
   const [speed, setSpeed] = useState("1");
+  const [communityKeys, setCommunityKeys] = useState([]);
+  const [filteredSubjects, setFilteredSubjects] = useState([]);
 
-  const getCommunity = async () => {
-    if (community.length > 0) {
-      resetHandler(showDefaultSubjects, false);
-      return setCommunitySubjects([]);
-    }
-    const data = await getCommunityHandler();
+  const getCommunity = async (id) => {
+    setLoading(true);
+    const data = await getCommunityHandler(id);
     if (!data) return;
-    const subjects = updateQuestions(data.questions, true);
+    const subjects = updateQuestions(data, "addCommunity");
     setCommunitySubjects(subjects);
+    const updatedSubjects = [...customSubjects, ...subjects];
+    setSubjects(updatedSubjects);
+    setLoading(false);
+  };
+
+  const removeCommunity = async (id) => {
+    setLoading(true);
+    await removeCommunityHandler(id);
+    const subjects = updateQuestions({ id }, "removeCommunity");
+    setCommunitySubjects(subjects);
+    const updatedSubjects = [...customSubjects, ...subjects];
+    setSubjects(updatedSubjects);
+    setLoading(false);
+  };
+
+  const getCommunityKeys = useCallback(async () => {
+    const data = await getCommunityKeysHandler(setLoading);
+    const { subjects } = data;
+    if (subjects) setCommunityKeys(subjects);
+  }, [getCommunityKeysHandler, setLoading, setCommunityKeys]);
+
+  const searchValueChangeHandler = (e) => {
+    const inputValue = e.target.value.toLowerCase();
+    setFilteredSubjects(
+      !inputValue.trim()
+        ? []
+        : communityKeys.filter((key) =>
+            key.subject.toLowerCase().includes(inputValue)
+          )
+    );
   };
 
   const speakHandler = async (type) => {
@@ -52,23 +84,39 @@ const Home = ({
       playerRef,
       setQuestion,
       setLoading,
+      communitySubjects,
+      customSubjects,
     };
     handleSpeak(type, speakData);
   };
 
+  useEffect(() => {
+    getCommunityKeys();
+  }, [getCommunityKeys]);
+
   return (
     <>
       <div className="options">
-        <div className="speed_input">
-          <label>speed</label>
-          <input
-            disabled={disableButton}
-            value={speed}
-            min={0.1}
-            max={2}
-            step={0.1}
-            type="number"
-            onChange={async (e) => await setSpeed(e.target.value)}
+        <div>
+          <div className="speed_input">
+            <label>speed</label>
+            <input
+              disabled={disableButton}
+              value={speed}
+              min={0.1}
+              max={2}
+              step={0.1}
+              type="number"
+              onChange={async (e) => await setSpeed(e.target.value)}
+            />
+          </div>
+          <Select
+            searchValueChangeHandler={searchValueChangeHandler}
+            filteredSubjects={filteredSubjects}
+            setFilteredSubjects={setFilteredSubjects}
+            getCommunity={getCommunity}
+            removeCommunity={removeCommunity}
+            subjects={subjects}
           />
         </div>
         <div>
@@ -113,11 +161,12 @@ const Home = ({
             screenWidth > 768
               ? {
                   width: "300px",
+                  marginLeft: "5%",
                 }
               : {
                   flex: 1,
                   width: "auto",
-                  "marginLeft": "5%",
+                  marginLeft: "5%",
                   height: "250px",
                 }
           }
@@ -131,7 +180,7 @@ const Home = ({
         )}
       </div>
       {loading && <LoadingSpinner />}
-      {showQuestion && !loading && (
+      {!loading && showQuestion && (
         <h1
           dir={question.match(/[a-z]/gi) ? "ltr" : "rtl"}
           className="question"
@@ -145,31 +194,35 @@ const Home = ({
             <button disabled={disableButton} onClick={() => setPage("form")}>
               Custom
             </button>
-
-            <button
-              disabled={disableButton}
-              onClick={() => {
-                resetHandler(!showDefaultSubjects, !!community.length);
-                setShowDefaultSubjects((prev) => !prev);
-              }}
-            >
-              {showDefaultSubjects ? "Remove Default" : "Show Default"}
-            </button>
-            <button disabled={disableButton} onClick={getCommunity}>
-              Community
-            </button>
           </div>
           <div className="actions">
-            {subjects.length > 1 &&
-              subjects.map((subject) => {
-                const idIndex = subject.lastIndexOf("-");
+            {subjects.length > 1 && (
+              <button
+                key="random"
+                disabled={disableButton}
+                onClick={() => speakHandler("Random")}
+              >
+                Random
+              </button>
+            )}
+            {subjects.length > 0 &&
+              subjects.map((subject, index) => {
+                const idIndex = subject.subject.lastIndexOf("-");
                 return (
                   <button
-                    key={subject}
+                    key={subject._id}
                     disabled={disableButton}
-                    onClick={() => speakHandler(subject)}
+                    onClick={() =>
+                      speakHandler(
+                        subject.subject === "Random"
+                          ? subject.subject
+                          : subject._id
+                      )
+                    }
                   >
-                    {idIndex === -1 ? subject : subject.slice(0, idIndex)}
+                    {idIndex === -1
+                      ? subject.subject
+                      : subject.subject.slice(0, idIndex)}
                   </button>
                 );
               })}

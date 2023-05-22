@@ -10,6 +10,8 @@ export const handleSpeak = async (type, speakData) => {
     playerRef,
     setQuestion,
     setLoading,
+    communitySubjects,
+    customSubjects,
   } = speakData;
 
   setDisableButton(true);
@@ -18,7 +20,7 @@ export const handleSpeak = async (type, speakData) => {
     handleSpeak.didrun = true;
   }
   try {
-    const question = askQuestion(type);
+    const question = askQuestion(type, communitySubjects, customSubjects);
     const utterance = await new SpeechSynthesisUtterance(question);
     const voices = await synth.getVoices();
     if (voices.length && question.match(/[a-z]/gi)) {

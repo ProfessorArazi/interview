@@ -2,11 +2,18 @@ import React, { useContext, useEffect, useState } from "react";
 import "@lottiefiles/lottie-player";
 import { MdArrowForward } from "react-icons/md";
 import "./Login.css";
-import { customTypes } from "../../helpers/questionsReading/questionsAsking";
 import LoadingSpinner from "../loading/LoadingSpinner";
 import { ApiContext } from "../../store/api-context";
 
-const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
+const Login = ({
+  setPage,
+  screenWidth,
+  setCustomSubjects,
+  setCommunitySubjects,
+  setIsAdmin,
+  customQuestions,
+  communityQuestions,
+}) => {
   const { setError, loginOrSignup } = useContext(ApiContext);
 
   const [signup, setSignup] = useState(false);
@@ -27,17 +34,15 @@ const Login = ({ setPage, screenWidth, setCustomSubjects, setIsAdmin }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
     if (!values.userName.trim() || !values.password.trim()) return;
-    const customQuestions = Object.entries(customTypes).map((q) => ({
-      subject: q[0].slice(0, q[0].lastIndexOf("-")),
-      questions: q[1],
-    }));
     setIsLoading(true);
     loginOrSignup(
       signup,
       values,
       customQuestions,
+      communityQuestions,
       setIsLoading,
       setCustomSubjects,
+      setCommunitySubjects,
       setIsAdmin,
       setPage,
       setError

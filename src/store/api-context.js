@@ -1,9 +1,6 @@
 import { createContext } from "react";
 import { toast } from "react-toastify";
-import {
-  customWithIds,
-  updateQuestions,
-} from "../helpers/questionsReading/questionsAsking";
+import { updateQuestions } from "../helpers/questionsReading/questionsAsking";
 import { httpRequest } from "../helpers/http/httpRequest";
 
 export const ApiContext = createContext({
@@ -38,11 +35,11 @@ export const ApiContextProvider = ({ children }) => {
   const fetchQuestions = async (
     setIsLoading,
     setCustomSubjects,
+    setCommunitySubjects,
     setIsAdmin,
     setPage
   ) => {
     if (user) {
-      setIsLoading(true);
       const res = await httpRequest({
         method: "post",
         url: "/getQuestions",
@@ -51,18 +48,22 @@ export const ApiContextProvider = ({ children }) => {
       if (!res.questions) {
         return;
       }
-      const subjects = updateQuestions(res.questions);
-      setCustomSubjects(subjects);
+      const { customTypes, communityTypes } = updateQuestions(res, "login");
+      setCustomSubjects(customTypes);
+      setCommunitySubjects(communityTypes);
       if (res.isAdmin) {
         setIsAdmin(true);
-        setPage("admin");
+      } else {
+        setPage("home");
       }
-      setIsLoading(false);
+    } else {
+      setPage("home");
     }
+    setIsLoading(false);
   };
 
   const addQuestionsRequest = async (data, values, community) => {
-    const res = await httpRequest({
+    await httpRequest({
       method: "post",
       url: "/addQuestions",
       data: {
@@ -71,23 +72,24 @@ export const ApiContextProvider = ({ children }) => {
         community,
       },
     });
-    customWithIds.push(res.question);
   };
 
   const loginOrSignup = async (
     signup,
     values,
     customQuestions,
+    communityQuestions,
     setIsLoading,
     setCustomSubjects,
+    setCommunitySubjects,
     setIsAdmin,
     setPage,
-    setError
+    setError,
   ) => {
     const data = await httpRequest({
       method: "post",
       url: `/users${signup ? "" : "/login"}`,
-      data: { ...values, questions: customQuestions },
+      data: { ...values, questions: customQuestions, communityQuestions },
     });
     if (!data.token) {
       setError(
@@ -97,8 +99,9 @@ export const ApiContextProvider = ({ children }) => {
       );
       return setIsLoading(false);
     }
-    const subjects = updateQuestions(data.questions);
-    setCustomSubjects(subjects);
+    const { customTypes, communityTypes } = updateQuestions(data, "login");
+    setCustomSubjects(customTypes);
+    setCommunitySubjects(communityTypes);
 
     localStorage.setItem(
       "data",
@@ -143,17 +146,46 @@ export const ApiContextProvider = ({ children }) => {
     closeAdmin();
   };
 
-  const getCommunityHandler = async () => {
+  const getCommunityHandler = async (id) => {
     const questions = await httpRequest({
       method: "post",
       url: "/community",
       data: {
-        valid: true,
+        communityId: id,
         ...user,
+        valid: true,
       },
     });
     if (questions.message) return somethingWentWrongHandler();
     return questions;
+  };
+
+  const removeCommunityHandler = async (id) => {
+    if (!user) return;
+    const questions = await httpRequest({
+      method: "post",
+      url: "/community/remove",
+      data: {
+        communityId: id,
+        ...user,
+        valid: true,
+      },
+    });
+    if (questions.message) return somethingWentWrongHandler();
+    return questions;
+  };
+
+  const getCommunityKeysHandler = async (setLoading) => {
+    const keys = await httpRequest({
+      method: "post",
+      url: "/community/keys",
+      data: {
+        ...user,
+      },
+    });
+    setLoading(false);
+    if (keys.message) return somethingWentWrongHandler();
+    return keys;
   };
 
   const editQuestions = async (data, values, subjectId, setCustomSubjects) => {
@@ -168,8 +200,11 @@ export const ApiContextProvider = ({ children }) => {
         subjectId,
       },
     });
-    const subjects = updateQuestions(res.questions);
-    setCustomSubjects(subjects);
+    const subjects = updateQuestions(
+      { questions: res.questions, communityQuestions: res.communityQuestions },
+      "login"
+    );
+    return subjects.customTypes;
   };
 
   const value = {
@@ -180,6 +215,8 @@ export const ApiContextProvider = ({ children }) => {
     getInvalidQuestions,
     approveQuestions,
     getCommunityHandler,
+    getCommunityKeysHandler,
+    removeCommunityHandler,
     editQuestions,
     user,
   };

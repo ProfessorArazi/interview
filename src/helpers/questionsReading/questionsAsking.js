@@ -2,130 +2,98 @@
 // react native questions url: https://github.com/samsoul16/react-native-interview-questions
 // js questions url: https://github.com/sudheerj/javascript-interview-questions
 
-import reactQuestions from "./questions/reactQuestions";
-import reactNativeQuestions from "./questions/reactNativeQuestions";
-import jsQuestions from "./questions/jsQuestions";
-import personalQuestions from "./questions/personalQuestions";
-import { generateUniqueId } from "./generateUniqueId";
+export let customTypes = [];
+export let communityTypes = [];
 
-const mappingQuestions = (questions, custom) => {
-  let modifiedQuestions;
+export const updateQuestions = (data, type) => {
+  const { questions, communityQuestions, id } = data;
+  switch (type) {
+    case "login":
+      customTypes = questions;
+      communityTypes = communityQuestions;
+      return {
+        customTypes,
+        communityTypes,
+      };
 
-  if (custom) {
-    modifiedQuestions = questions.split("\n");
-  } else
-    modifiedQuestions = questions
-      .split(/\s\d+\s/)
-      .map((question) =>
-        question
-          .replace(/Q[0-9]+|“/gi, "")
-          .replace("\t", "")
-          .replace("\n", "")
-          .replace(/[…]|-/g, " ")
-      )
-      .filter((question) => /[a-z]/gi.test(question));
-  return modifiedQuestions;
-};
+    case "addCommunity":
+      communityTypes.push(...questions);
+      return communityTypes;
 
-export let customTypes = {};
-export let communityTypes = {};
-export let customWithIds = [];
+    case "removeCommunity":
+      const communityIndex = communityTypes.findIndex(
+        (community) => community._id === id
+      );
+      communityTypes.splice(communityIndex, 1);
+      return communityTypes;
 
-let defaultTypes = {
-  React: mappingQuestions(reactQuestions),
-  "React Native": mappingQuestions(reactNativeQuestions),
-  JS: mappingQuestions(jsQuestions),
-  Personal: mappingQuestions(personalQuestions),
-};
+    case "customCreate":
+      customTypes.push({
+        ...questions,
+        questions: questions.questions.split("\n"),
+        communityId: "",
+        _id: Math.random(),
+      });
+      return customTypes;
 
-let questionsTypes = {
-  ...defaultTypes,
-};
-
-let types = [...Object.keys(questionsTypes)];
-export const updateQuestions = (data, community) => {
-  customWithIds = [...data];
-  const obj = {};
-  data.forEach((q) => {
-    const uniqueSubject = generateUniqueId(q.subject);
-    obj[uniqueSubject] = q.questions;
-    types.push(uniqueSubject);
-  });
-  if (community) {
-    communityTypes = { ...obj };
-  } else customTypes = { ...obj };
-  questionsTypes = { ...defaultTypes, ...customTypes, ...communityTypes };
-  types = [...Object.keys(questionsTypes)];
-  return Object.keys(obj);
-};
-
-export const resetHandler = (showDefault, community) => {
-  if (showDefault && community) {
-    questionsTypes = { ...defaultTypes, ...customTypes, ...communityTypes };
-  } else if (!showDefault && !community) {
-    questionsTypes = { ...customTypes };
-  } else if (!showDefault) {
-    questionsTypes = { ...communityTypes, ...customTypes };
-  } else if (!community) {
-    questionsTypes = { ...defaultTypes, ...customTypes };
+    default:
+      const index = customTypes.findIndex((custom) => custom._id === id);
+      customTypes.splice(index, 1, {
+        ...questions,
+        questions: questions.questions.split("\n"),
+        communityId: "",
+        _id: Math.random(),
+      });
+      return customTypes;
   }
-
-  types = [...Object.keys(questionsTypes)];
 };
 
-export const addQuestions = (data) => {
-  const questions = [...mappingQuestions(data.questions, true)];
-  const uniqueSubject = generateUniqueId(data.subject);
-  questionsTypes[uniqueSubject] = questions;
-  customTypes[uniqueSubject] = [...questionsTypes[uniqueSubject]];
-  types = [...Object.keys(questionsTypes)];
-  return uniqueSubject;
-};
+export const askQuestion = (type, communitySubjects, customSubjects) => {
+  const allData = [...communitySubjects, ...customSubjects].filter(
+    (data) => data.questions.length > 0
+  );
 
-export const askQuestion = (type) => {
-  if (type === "Random" && types.length === 0) {
+  if (type === "Random" && allData.length === 0) {
     return "No questions left";
   }
-  const randomIndex = Math.floor(Math.random() * types.length);
-  const questionType = type === "Random" ? types[randomIndex] : type;
-  const questions = questionsTypes[questionType];
+
+  const randomIndex = Math.floor(Math.random() * allData.length);
+  let questionsData =
+    type === "Random"
+      ? allData[randomIndex]
+      : customSubjects.find((custom) => custom._id === type);
+  if (!questionsData) {
+    questionsData = communitySubjects.find(
+      (community) => community._id === type
+    );
+  }
+
+  if (!questionsData.questions) {
+    if (type === "Random") {
+      questionsData.questions.splice(randomIndex, 1);
+      return askQuestion(type, communitySubjects, customSubjects);
+    }
+    return `No ${type} questions left`;
+  }
+
+  const { questions } = questionsData;
   let i = Math.floor(Math.random() * questions.length);
   const question = questions[i];
-  if (!question) {
-    if (type === "Random") {
-      types.splice(randomIndex, 1);
-      return askQuestion(type);
-    }
-    return `No ${
-      type === "reactNative"
-        ? "react native"
-        : type.slice(0, type.lastIndexOf("-"))
-    } questions left`;
-  }
-  const newQuestions = JSON.parse(JSON.stringify(questions));
-  newQuestions.splice(i, 1);
-  questionsTypes[questionType] = newQuestions;
+  if (!question) return `No ${questionsData.subject} questions left`;
+  questions.splice(i, 1);
   return question;
 };
 
 export const getCustomQuestionsForEdit = (type) => {
-  // const customSubject = customWithIds.find(
-  //   (custom) => custom.subject === subject
-  // );
+  const customSubject = customTypes.find((custom) => custom._id === type);
   return {
-    questions: customWithIds
-      .find((custom) => custom.subject === type)
-      .questions.join("\n"),
-    // community: customSubject?.sharedWithCommunity,
+    questions: customSubject.questions.join("\n"),
+    subject: customSubject.subject,
   };
 };
 
-export const deleteQuestion = (subject) => {
-  delete questionsTypes[subject];
-  delete customTypes[subject];
-};
-
-export const editQuestion = (data, subject) => {
-  deleteQuestion(subject);
-  return addQuestions(data);
+export const deleteQuestion = (id) => {
+  const index = customTypes.findIndex((custom) => custom._id === id);
+  customTypes.splice(index, 1);
+  return customTypes;
 };

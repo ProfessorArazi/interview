@@ -1,11 +1,9 @@
 import React, { useContext } from "react";
 import { useState } from "react";
 import {
-  addQuestions,
-  customWithIds,
   deleteQuestion,
-  editQuestion,
   getCustomQuestionsForEdit,
+  updateQuestions,
 } from "../../helpers/questionsReading/questionsAsking";
 import "./AddQuestionsForm.css";
 import { MdArrowForward } from "react-icons/md";
@@ -40,19 +38,25 @@ const AddQuestionsForm = ({
     }
     const data = JSON.parse(localStorage.getItem("data"));
     if (pickedSubjectForEdit) {
-      const subject = editQuestion(values, pickedSubjectForEdit);
-      const temp = [...customSubjects];
-      temp.splice(temp.indexOf(pickedSubjectForEdit), 1, subject);
-      setCustomSubjects(temp);
       if (data) {
-        const subjectId = customWithIds.find(
-          (custom) => custom.subject === pickedSubjectForEdit
-        )._id;
-        editQuestions(data, values, subjectId, setCustomSubjects);
+        const subjects = await editQuestions(
+          data,
+          values,
+          pickedSubjectForEdit,
+          setCustomSubjects
+        );
+        setCustomSubjects(subjects);
+      } else {
+        const subjects = updateQuestions(
+          { questions: values, id: pickedSubjectForEdit },
+          "customEdit"
+        );
+
+        setCustomSubjects(subjects);
       }
     } else {
-      const customSubject = addQuestions(values);
-      setCustomSubjects((prev) => [...prev, customSubject]);
+      const subjects = updateQuestions({ questions: values }, "customCreate");
+      setCustomSubjects(subjects);
       if (data || community) {
         addQuestionsRequest(data, values, community);
       }
@@ -64,24 +68,25 @@ const AddQuestionsForm = ({
   const getQuestionsHandler = (subject) => {
     const data = getCustomQuestionsForEdit(subject);
     setValues({
-      subject,
+      subject: data.subject,
       questions: data.questions,
     });
-    // setCommunity(data.community);
     setPickedSubjectForEdit(subject);
   };
 
-  const deleteQuestionsHandler = () => {
-    deleteQuestion(pickedSubjectForEdit);
-    const temp = [...customSubjects];
-    temp.splice(temp.indexOf(pickedSubjectForEdit), 1);
-    setCustomSubjects(temp);
+  const deleteQuestionsHandler = async () => {
     const data = JSON.parse(localStorage.getItem("data"));
     if (data) {
-      const subjectId = customWithIds.find(
-        (custom) => custom.subject === pickedSubjectForEdit
-      )._id;
-      editQuestions(data, null, subjectId, setCustomSubjects);
+      const subjects = await editQuestions(
+        data,
+        null,
+        pickedSubjectForEdit,
+        setCustomSubjects
+      );
+      setCustomSubjects(subjects);
+    } else {
+      const subjects = deleteQuestion(pickedSubjectForEdit);
+      setCustomSubjects(subjects);
     }
     closeForm();
   };
@@ -100,11 +105,11 @@ const AddQuestionsForm = ({
       <h1 className="title">{customSubjects ? "Edit" : "Custom"} Questions</h1>
       {customSubjects && !pickedSubjectForEdit ? (
         <div className="actions">
-          {customWithIds.map((custom) => {
+          {customSubjects.map((custom) => {
             return (
               <button
                 key={custom.subject}
-                onClick={() => getQuestionsHandler(custom.subject)}
+                onClick={() => getQuestionsHandler(custom._id)}
               >
                 {custom.subject}
               </button>
