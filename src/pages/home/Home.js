@@ -46,7 +46,8 @@ const Home = ({
   const [showSearch, setShowSearch] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  const getCommunity = async (id) => {
+  const getCommunity = async (id, setSelectLoading) => {
+    setSelectLoading(id);
     if (screenWidth > 768) setLoading(true);
     const data = await getCommunityHandler(id);
     if (!data) return;
@@ -55,9 +56,11 @@ const Home = ({
     const updatedSubjects = [...customSubjects, ...subjects];
     setSubjects(updatedSubjects);
     setLoading(false);
+    setSelectLoading(false);
   };
 
-  const removeCommunity = async (id) => {
+  const removeCommunity = async (id, setSelectLoading) => {
+    setSelectLoading(id);
     if (screenWidth > 768) setLoading(true);
     await removeCommunityHandler(id);
     const subjects = updateQuestions({ id }, "removeCommunity");
@@ -65,6 +68,7 @@ const Home = ({
     const updatedSubjects = [...customSubjects, ...subjects];
     setSubjects(updatedSubjects);
     setLoading(false);
+    setSelectLoading(false);
   };
 
   const getCommunityKeys = useCallback(async () => {

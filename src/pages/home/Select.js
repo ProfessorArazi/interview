@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../App.css";
 import { MdAdd, MdRemove } from "react-icons/md";
+import LoadingSpinner from "../../components/loading/LoadingSpinner";
 
 const Select = ({
   searchValueChangeHandler,
@@ -16,6 +17,8 @@ const Select = ({
 }) => {
   const selectRef = useRef(null);
   const inputRef = useRef(null);
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -66,18 +69,21 @@ const Select = ({
                   {filteredSubjects.map((option) => {
                     const handleClick = (event) => {
                       event.stopPropagation();
-
-                      getCommunity(option._id);
+                      getCommunity(option._id, setLoading);
                     };
 
                     return (
                       <div key={option._id}>
                         {option.subject}
-                        <MdAdd
-                          onClick={handleClick}
-                          size={24}
-                          color={"#D6B370"}
-                        />
+                        {loading === option._id ? (
+                          <LoadingSpinner styling={"select-loading"} />
+                        ) : (
+                          <MdAdd
+                            onClick={handleClick}
+                            size={24}
+                            color={"#D6B370"}
+                          />
+                        )}
                       </div>
                     );
                   })}
@@ -100,18 +106,21 @@ const Select = ({
                     .map((option) => {
                       const handleClick = (event) => {
                         event.stopPropagation();
-
-                        removeCommunity(option._id);
+                        removeCommunity(option._id, setLoading);
                       };
 
                       return (
                         <div key={option._id}>
                           {option.subject}
-                          <MdRemove
-                            onClick={handleClick}
-                            size={24}
-                            color={"#AE5D29"}
-                          />
+                          {loading === option._id ? (
+                            <LoadingSpinner styling={"select-loading"} />
+                          ) : (
+                            <MdRemove
+                              onClick={handleClick}
+                              size={24}
+                              color={"#AE5D29"}
+                            />
+                          )}
                         </div>
                       );
                     })}
