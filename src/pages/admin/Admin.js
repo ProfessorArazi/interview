@@ -36,7 +36,7 @@ const Admin = ({ closeAdmin, screenWidth }) => {
     <>
       <div className="options back">
         <button onClick={submitHandler}>
-          <MdArrowForward size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
+          <MdArrowForward size={screenWidth <= 768 ? 24 : 40} color={"#fff"} />
         </button>
       </div>
       <h1 className="title">Admin</h1>
@@ -87,7 +87,7 @@ const Admin = ({ closeAdmin, screenWidth }) => {
                       }
                     >
                       <AiFillCloseCircle
-                        size={screenWidth < 768 ? 24 : 40}
+                        size={screenWidth <= 768 ? 24 : 40}
                         color={"#b51a1a"}
                       />
                     </button>
@@ -97,7 +97,7 @@ const Admin = ({ closeAdmin, screenWidth }) => {
                       }
                     >
                       <MdCheckCircle
-                        size={screenWidth < 768 ? 24 : 40}
+                        size={screenWidth <= 768 ? 24 : 40}
                         color={"green"}
                       />
                     </button>

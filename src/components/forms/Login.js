@@ -57,7 +57,7 @@ const Login = ({
     <>
       <div className="options back">
         <button onClick={() => setPage("home")}>
-          <MdArrowForward size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
+          <MdArrowForward size={screenWidth <= 768 ? 24 : 40} color={"#fff"} />
         </button>
       </div>
       <lottie-player

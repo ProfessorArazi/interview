@@ -1,6 +1,12 @@
 import React, { useCallback, useContext, useEffect } from "react";
 import "@lottiefiles/lottie-player";
-import { MdSubtitles, MdCameraAlt, MdPerson, MdEdit } from "react-icons/md";
+import {
+  MdSubtitles,
+  MdCameraAlt,
+  MdPerson,
+  MdEdit,
+  MdSearch,
+} from "react-icons/md";
 import WebcamComponent from "../../components/webcam/WebcamComponent";
 import LoadingSpinner from "../../components/loading/LoadingSpinner";
 import { useRef, useState } from "react";
@@ -37,9 +43,11 @@ const Home = ({
   const [speed, setSpeed] = useState("1");
   const [communityKeys, setCommunityKeys] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState([]);
+  const [showSearch, setShowSearch] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const getCommunity = async (id) => {
-    setLoading(true);
+    if (screenWidth > 768) setLoading(true);
     const data = await getCommunityHandler(id);
     if (!data) return;
     const subjects = updateQuestions(data, "addCommunity");
@@ -50,7 +58,7 @@ const Home = ({
   };
 
   const removeCommunity = async (id) => {
-    setLoading(true);
+    if (screenWidth > 768) setLoading(true);
     await removeCommunityHandler(id);
     const subjects = updateQuestions({ id }, "removeCommunity");
     setCommunitySubjects(subjects);
@@ -66,12 +74,12 @@ const Home = ({
   }, [getCommunityKeysHandler, setLoading, setCommunityKeys]);
 
   const searchValueChangeHandler = (e) => {
-    const inputValue = e.target.value.toLowerCase();
+    const inputValue = !e ? e : e.target.value.toLowerCase();
     setFilteredSubjects(
       !inputValue.trim()
         ? []
         : communityKeys.filter((key) =>
-            key.subject.toLowerCase().includes(inputValue)
+            key.subject.toLowerCase().startsWith(inputValue)
           )
     );
   };
@@ -110,22 +118,38 @@ const Home = ({
               onChange={async (e) => await setSpeed(e.target.value)}
             />
           </div>
-          <Select
-            searchValueChangeHandler={searchValueChangeHandler}
-            filteredSubjects={filteredSubjects}
-            setFilteredSubjects={setFilteredSubjects}
-            getCommunity={getCommunity}
-            removeCommunity={removeCommunity}
-            subjects={subjects}
-          />
+          {screenWidth > 768 && (
+            <Select
+              communitySubjects={communitySubjects}
+              searchValueChangeHandler={searchValueChangeHandler}
+              filteredSubjects={filteredSubjects.filter(
+                (element) =>
+                  !communitySubjects.find(
+                    (subject) => subject._id === element._id
+                  )
+              )}
+              getCommunity={getCommunity}
+              removeCommunity={removeCommunity}
+              setShowDropdown={setShowDropdown}
+              showDropdown={showDropdown}
+              showSearch={showSearch}
+            />
+          )}
         </div>
         <div>
-          <button onClick={() => setShowQuestion((prev) => !prev)}>
-            <MdSubtitles
-              size={screenWidth < 768 ? 24 : 40}
-              color={showQuestion ? "#D6B370" : "#fff"}
+          <button
+            onClick={() =>
+              setTimeout(() => {
+                setShowSearch((prev) => !prev);
+              }, 1)
+            }
+          >
+            <MdSearch
+              size={screenWidth <= 768 ? 24 : 40}
+              color={showSearch ? "#D6B370" : "#fff"}
             />
           </button>
+
           <button
             onClick={() => {
               showCamera && setFirstCamera(false);
@@ -133,20 +157,26 @@ const Home = ({
             }}
           >
             <MdCameraAlt
-              size={screenWidth < 768 ? 24 : 40}
+              size={screenWidth <= 768 ? 24 : 40}
               color={showCamera ? "#D6B370" : "#fff"}
             />
           </button>
           {(!localStorage.getItem("data") || isAdmin) && (
             <button onClick={() => setPage(isAdmin ? "admin" : "login")}>
-              <MdPerson size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
+              <MdPerson size={screenWidth <= 768 ? 24 : 40} color={"#fff"} />
             </button>
           )}
           {customSubjects.length > 0 && (
             <button onClick={() => setPage("edit")}>
-              <MdEdit size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
+              <MdEdit size={screenWidth <= 768 ? 24 : 40} color={"#fff"} />
             </button>
           )}
+          <button onClick={() => setShowQuestion((prev) => !prev)}>
+            <MdSubtitles
+              size={screenWidth <= 768 ? 24 : 40}
+              color={showQuestion ? "#D6B370" : "#fff"}
+            />
+          </button>
         </div>
       </div>
       <div className="zoom">
@@ -195,38 +225,58 @@ const Home = ({
               Custom
             </button>
           </div>
-          <div className="actions">
-            {subjects.length > 1 && (
-              <button
-                key="random"
-                disabled={disableButton}
-                onClick={() => speakHandler("Random")}
-              >
-                Random
-              </button>
-            )}
-            {subjects.length > 0 &&
-              subjects.map((subject, index) => {
-                const idIndex = subject.subject.lastIndexOf("-");
-                return (
-                  <button
-                    key={subject._id}
-                    disabled={disableButton}
-                    onClick={() =>
-                      speakHandler(
-                        subject.subject === "Random"
-                          ? subject.subject
-                          : subject._id
-                      )
-                    }
-                  >
-                    {idIndex === -1
-                      ? subject.subject
-                      : subject.subject.slice(0, idIndex)}
-                  </button>
-                );
-              })}
-          </div>
+          {screenWidth <= 768 && showSearch ? (
+            <Select
+              communitySubjects={communitySubjects}
+              searchValueChangeHandler={searchValueChangeHandler}
+              filteredSubjects={filteredSubjects.filter(
+                (element) =>
+                  !communitySubjects.find(
+                    (subject) => subject._id === element._id
+                  )
+              )}
+              getCommunity={getCommunity}
+              removeCommunity={removeCommunity}
+              setShowDropdown={setShowDropdown}
+              showDropdown={showDropdown}
+              showSearch={showSearch}
+              setShowSearch={setShowSearch}
+              mobile
+            />
+          ) : (
+            <div className="actions">
+              {subjects.length > 1 && (
+                <button
+                  key="random"
+                  disabled={disableButton}
+                  onClick={() => speakHandler("Random")}
+                >
+                  Random
+                </button>
+              )}
+              {subjects.length > 0 &&
+                subjects.map((subject, index) => {
+                  const idIndex = subject.subject.lastIndexOf("-");
+                  return (
+                    <button
+                      key={subject._id}
+                      disabled={disableButton}
+                      onClick={() =>
+                        speakHandler(
+                          subject.subject === "Random"
+                            ? subject.subject
+                            : subject._id
+                        )
+                      }
+                    >
+                      {idIndex === -1
+                        ? subject.subject
+                        : subject.subject.slice(0, idIndex)}
+                    </button>
+                  );
+                })}
+            </div>
+          )}
         </>
       )}
     </>

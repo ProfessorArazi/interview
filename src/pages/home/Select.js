@@ -7,14 +7,25 @@ const Select = ({
   filteredSubjects,
   getCommunity,
   removeCommunity,
-  setFilteredSubjects,
-  subjects,
+  communitySubjects,
+  setShowDropdown,
+  showDropdown,
+  showSearch,
+  setShowSearch,
+  mobile,
 }) => {
   const selectRef = useRef(null);
+  const inputRef = useRef(null);
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (selectRef.current && !selectRef.current.contains(event.target)) {
-        setFilteredSubjects([]);
+        if (mobile) {
+          setShowSearch(false);
+          searchValueChangeHandler("");
+        } else {
+          setShowDropdown(false);
+        }
       }
     };
 
@@ -22,49 +33,93 @@ const Select = ({
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [setFilteredSubjects]);
+  }, [setShowDropdown, setShowSearch, searchValueChangeHandler, mobile]);
 
   return (
-    <div ref={selectRef} className="select">
-      <input
-        onFocus={searchValueChangeHandler}
-        onChange={searchValueChangeHandler}
-        type="text"
-        placeholder="Search"
-        className={`input-field ${
-          filteredSubjects.length === 0 && "radius-input"
-        }`}
-      />
-      {filteredSubjects.length > 0 && (
-        <div className="select-field">
-          {filteredSubjects.map((option) => {
-            const inSubjects = subjects.find(
-              (subject) => subject._id === option._id
-            );
+    <div className="modal">
+      <div
+        ref={selectRef}
+        className={`select ${!showSearch ? "select-none" : ""}`}
+      >
+        <input
+          ref={inputRef}
+          onFocus={(e) => {
+            searchValueChangeHandler(e);
+            setShowDropdown(true);
+          }}
+          onChange={searchValueChangeHandler}
+          type="text"
+          placeholder="Search"
+          className={`input-field ${
+            (!showDropdown ||
+              (communitySubjects.length === 0 &&
+                filteredSubjects.length === 0) ||
+              mobile) &&
+            "radius-input"
+          }`}
+        />
+        {(showDropdown || mobile) &&
+          (communitySubjects.length > 0 || filteredSubjects.length > 0) && (
+            <div className="select-field">
+              {filteredSubjects.length > 0 ? (
+                <div className="filtered-subjects">
+                  {filteredSubjects.map((option) => {
+                    const handleClick = (event) => {
+                      event.stopPropagation();
 
-            const handleClick = (event) => {
-              event.stopPropagation();
+                      getCommunity(option._id);
+                    };
 
-              if (inSubjects) {
-                removeCommunity(option._id);
-              } else {
-                getCommunity(option._id);
-              }
-            };
+                    return (
+                      <div key={option._id}>
+                        {option.subject}
+                        <MdAdd
+                          onClick={handleClick}
+                          size={24}
+                          color={"#D6B370"}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                inputRef.current &&
+                inputRef.current.value.trim() !== "" && <p>No jobs found</p>
+              )}
+              {communitySubjects.length > 0 && (
+                <div
+                  className={
+                    filteredSubjects.length === 0 &&
+                    (!inputRef.current || inputRef.current.value.trim() === "")
+                      ? "filtered-subjects"
+                      : "community-subjects"
+                  }
+                >
+                  {communitySubjects
+                    .sort((a, b) => a.subject.localeCompare(b.subject))
+                    .map((option) => {
+                      const handleClick = (event) => {
+                        event.stopPropagation();
 
-            return (
-              <div onClick={handleClick} key={option._id}>
-                {option.subject}
-                {inSubjects ? (
-                  <MdRemove size={24} color={"#D6B370"} />
-                ) : (
-                  <MdAdd size={24} color={"#D6B370"} />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
+                        removeCommunity(option._id);
+                      };
+
+                      return (
+                        <div key={option._id}>
+                          {option.subject}
+                          <MdRemove
+                            onClick={handleClick}
+                            size={24}
+                            color={"#AE5D29"}
+                          />
+                        </div>
+                      );
+                    })}
+                </div>
+              )}
+            </div>
+          )}
+      </div>
     </div>
   );
 };

@@ -99,7 +99,7 @@ const AddQuestionsForm = ({
             pickedSubjectForEdit ? setPickedSubjectForEdit(false) : closeForm()
           }
         >
-          <MdArrowForward size={screenWidth < 768 ? 24 : 40} color={"#fff"} />
+          <MdArrowForward size={screenWidth <= 768 ? 24 : 40} color={"#fff"} />
         </button>
       </div>
       <h1 className="title">{customSubjects ? "Edit" : "Custom"} Questions</h1>
