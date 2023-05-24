@@ -229,7 +229,7 @@ const Home = ({
               Custom
             </button>
           </div>
-          {screenWidth <= 768 && showSearch ? (
+          {screenWidth <= 768 ? (
             <Select
               communitySubjects={communitySubjects}
               searchValueChangeHandler={searchValueChangeHandler}

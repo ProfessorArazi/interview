@@ -40,12 +40,10 @@ const Select = ({
   }, [setShowDropdown, setShowSearch, searchValueChangeHandler, mobile]);
 
   return (
-    <div className="modal">
+    <div className={`modal ${!showSearch ? "select-none" : ""}`}>
       <div
         ref={selectRef}
-        className={`select ${!showSearch ? "select-none" : ""} ${
-          isKeyboardOpen ? "keyboard" : ""
-        }`}
+        className={`select ${isKeyboardOpen ? "keyboard" : ""}`}
       >
         <input
           ref={inputRef}
