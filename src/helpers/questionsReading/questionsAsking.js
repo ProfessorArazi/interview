@@ -15,7 +15,9 @@ export const updateQuestions = (data, type) => {
         customTypes,
         communityTypes,
       };
-
+    case "customUpdate":
+      customTypes = questions;
+      return customTypes;
     case "addCommunity":
       communityTypes.push(...questions);
       return communityTypes;

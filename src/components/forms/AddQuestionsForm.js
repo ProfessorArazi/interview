@@ -55,11 +55,15 @@ const AddQuestionsForm = ({
         setCustomSubjects(subjects);
       }
     } else {
-      const subjects = updateQuestions({ questions: values }, "customCreate");
-      setCustomSubjects(subjects);
+      let res = {};
       if (data || community) {
-        addQuestionsRequest(data, values, community);
+        res = await addQuestionsRequest(data, values, community);
       }
+      const subjects = updateQuestions(
+        { questions: res.questions || values },
+        res.questions ? "customUpdate" : "customCreate"
+      );
+      setCustomSubjects(subjects);
     }
 
     closeForm();

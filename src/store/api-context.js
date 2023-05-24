@@ -63,7 +63,7 @@ export const ApiContextProvider = ({ children }) => {
   };
 
   const addQuestionsRequest = async (data, values, community) => {
-    await httpRequest({
+    return await httpRequest({
       method: "post",
       url: "/addQuestions",
       data: {
@@ -84,7 +84,7 @@ export const ApiContextProvider = ({ children }) => {
     setCommunitySubjects,
     setIsAdmin,
     setPage,
-    setError,
+    setError
   ) => {
     const data = await httpRequest({
       method: "post",
