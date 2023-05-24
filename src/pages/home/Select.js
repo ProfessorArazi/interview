@@ -49,7 +49,6 @@ const Select = ({
       >
         <input
           ref={inputRef}
-          onBlur={() => setIsKeyboardOpen(false)}
           onFocus={(e) => {
             if (mobile) setIsKeyboardOpen(true);
             searchValueChangeHandler(e);
