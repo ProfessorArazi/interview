@@ -56,13 +56,16 @@ const Select = ({
           className={`input-field ${
             (!showDropdown ||
               (communitySubjects.length === 0 &&
-                filteredSubjects.length === 0) ||
+                filteredSubjects.length === 0 &&
+                inputRef.current?.value === "") ||
               mobile) &&
             "radius-input"
           }`}
         />
         {(showDropdown || mobile) &&
-          (communitySubjects.length > 0 || filteredSubjects.length > 0) && (
+          (inputRef.current?.value !== "" ||
+            communitySubjects.length > 0 ||
+            filteredSubjects.length > 0) && (
             <div className="select-field">
               {filteredSubjects.length > 0 ? (
                 <div className="filtered-subjects">
