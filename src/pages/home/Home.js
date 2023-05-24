@@ -229,7 +229,7 @@ const Home = ({
               Custom
             </button>
           </div>
-          {screenWidth <= 768 ? (
+          {screenWidth <= 768 && (
             <Select
               communitySubjects={communitySubjects}
               searchValueChangeHandler={searchValueChangeHandler}
@@ -247,40 +247,39 @@ const Home = ({
               setShowSearch={setShowSearch}
               mobile
             />
-          ) : (
-            <div className="actions">
-              {subjects.length > 1 && (
-                <button
-                  key="random"
-                  disabled={disableButton}
-                  onClick={() => speakHandler("Random")}
-                >
-                  Random
-                </button>
-              )}
-              {subjects.length > 0 &&
-                subjects.map((subject, index) => {
-                  const idIndex = subject.subject.lastIndexOf("-");
-                  return (
-                    <button
-                      key={subject._id}
-                      disabled={disableButton}
-                      onClick={() =>
-                        speakHandler(
-                          subject.subject === "Random"
-                            ? subject.subject
-                            : subject._id
-                        )
-                      }
-                    >
-                      {idIndex === -1
-                        ? subject.subject
-                        : subject.subject.slice(0, idIndex)}
-                    </button>
-                  );
-                })}
-            </div>
           )}
+          <div className="actions">
+            {subjects.length > 1 && (
+              <button
+                key="random"
+                disabled={disableButton}
+                onClick={() => speakHandler("Random")}
+              >
+                Random
+              </button>
+            )}
+            {subjects.length > 0 &&
+              subjects.map((subject, index) => {
+                const idIndex = subject.subject.lastIndexOf("-");
+                return (
+                  <button
+                    key={subject._id}
+                    disabled={disableButton}
+                    onClick={() =>
+                      speakHandler(
+                        subject.subject === "Random"
+                          ? subject.subject
+                          : subject._id
+                      )
+                    }
+                  >
+                    {idIndex === -1
+                      ? subject.subject
+                      : subject.subject.slice(0, idIndex)}
+                  </button>
+                );
+              })}
+          </div>
         </>
       )}
     </>

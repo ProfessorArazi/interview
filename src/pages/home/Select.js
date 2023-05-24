@@ -39,8 +39,15 @@ const Select = ({
     };
   }, [setShowDropdown, setShowSearch, searchValueChangeHandler, mobile]);
 
+  useEffect(() => {
+    if (!showSearch) {
+      inputRef.current.value = "";
+      setIsKeyboardOpen(false);
+    }
+  }, [showSearch]);
+
   return (
-    <div className={`modal ${!showSearch ? "select-none" : ""}`}>
+    <div className={`${!showSearch ? "select-none" : "modal"}`}>
       <div
         ref={selectRef}
         className={`select ${isKeyboardOpen ? "keyboard" : ""}`}

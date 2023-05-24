@@ -238,17 +238,6 @@ button::-webkit-scrollbar {
   }
 }
 
-@keyframes scaleDown {
-  0% {
-    transform: scale(1) translateY(0px);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.8) translateY(1000px);
-    opacity: 0;
-  }
-}
-
 @media (max-width: 768px) {
   .actions {
     width: 80%;
@@ -308,6 +297,5 @@ button::-webkit-scrollbar {
 
   .select-none {
     z-index: 0;
-    animation: scaleDown 0.4s;
   }
 }
