@@ -229,25 +229,7 @@ const Home = ({
               Custom
             </button>
           </div>
-          {screenWidth <= 768 && (
-            <Select
-              communitySubjects={communitySubjects}
-              searchValueChangeHandler={searchValueChangeHandler}
-              filteredSubjects={filteredSubjects.filter(
-                (element) =>
-                  !communitySubjects.find(
-                    (subject) => subject._id === element._id
-                  )
-              )}
-              getCommunity={getCommunity}
-              removeCommunity={removeCommunity}
-              setShowDropdown={setShowDropdown}
-              showDropdown={showDropdown}
-              showSearch={showSearch}
-              setShowSearch={setShowSearch}
-              mobile
-            />
-          )}
+
           <div className="actions">
             {subjects.length > 1 && (
               <button
@@ -280,6 +262,25 @@ const Home = ({
                 );
               })}
           </div>
+          {screenWidth <= 768 && (
+            <Select
+              communitySubjects={communitySubjects}
+              searchValueChangeHandler={searchValueChangeHandler}
+              filteredSubjects={filteredSubjects.filter(
+                (element) =>
+                  !communitySubjects.find(
+                    (subject) => subject._id === element._id
+                  )
+              )}
+              getCommunity={getCommunity}
+              removeCommunity={removeCommunity}
+              setShowDropdown={setShowDropdown}
+              showDropdown={showDropdown}
+              showSearch={showSearch}
+              setShowSearch={setShowSearch}
+              mobile
+            />
+          )}
         </>
       )}
     </>
