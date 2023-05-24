@@ -193,6 +193,10 @@ button::-webkit-scrollbar {
   margin: 0 !important;
 }
 
+.keyboard {
+  padding-bottom: 100px;
+}
+
 .actions button:disabled {
   background-color: gray;
   cursor: auto;

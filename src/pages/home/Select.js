@@ -19,6 +19,8 @@ const Select = ({
   const inputRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [initialHeight, setInitialHeight] = useState(window.innerHeight);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -38,11 +40,26 @@ const Select = ({
     };
   }, [setShowDropdown, setShowSearch, searchValueChangeHandler, mobile]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      const currentHeight = window.innerHeight;
+      setIsKeyboardOpen(currentHeight < initialHeight);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [initialHeight]);
+
   return (
     <div className="modal">
       <div
         ref={selectRef}
-        className={`select ${!showSearch ? "select-none" : ""}`}
+        className={`select ${!showSearch ? "select-none" : ""} ${
+          isKeyboardOpen ? "keyboard" : ""
+        }`}
       >
         <input
           ref={inputRef}
