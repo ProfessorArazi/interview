@@ -22,6 +22,7 @@ const Home = ({
   screenWidth,
   isAdmin,
   customSubjects,
+  voices,
 }) => {
   const {
     getCommunityHandler,
@@ -98,6 +99,7 @@ const Home = ({
       setLoading,
       communitySubjects,
       customSubjects,
+      voices,
     };
     handleSpeak(type, speakData);
   };

@@ -1,6 +1,7 @@
 import { askQuestion } from "../questionsReading/questionsAsking";
 
 const synth = window.speechSynthesis;
+const utterance = new SpeechSynthesisUtterance();
 
 export const handleSpeak = async (type, speakData) => {
   const {
@@ -12,6 +13,7 @@ export const handleSpeak = async (type, speakData) => {
     setLoading,
     communitySubjects,
     customSubjects,
+    voices,
   } = speakData;
 
   setDisableButton(true);
@@ -21,8 +23,7 @@ export const handleSpeak = async (type, speakData) => {
   }
   try {
     const question = askQuestion(type, communitySubjects, customSubjects);
-    const utterance = await new SpeechSynthesisUtterance(question);
-    const voices = await synth.getVoices();
+    utterance.text = question;
     if (voices.length && question.match(/[a-z]/gi)) {
       const voice = voices.find(
         (voice) =>

@@ -11,6 +11,9 @@ import { ApiContextProvider } from "./store/api-context";
 import Layout from "./components/layout/Layout";
 
 function App() {
+  const synth = window.speechSynthesis;
+
+  const [voices, setVoices] = useState([]);
   const [page, setPage] = useState("admin");
   const [customSubjects, setCustomSubjects] = useState([]);
   const [communitySubjects, setCommunitySubjects] = useState([]);
@@ -21,6 +24,15 @@ function App() {
   const handleResize = () => {
     setScreenWidth(window.innerWidth);
   };
+
+  useEffect(() => {
+    const fetchVoices = async () => {
+      const voices = await synth.getVoices();
+      setVoices(voices);
+    };
+
+    fetchVoices();
+  }, [synth]);
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -72,6 +84,7 @@ function App() {
                 screenWidth={screenWidth}
                 isAdmin={isAdmin}
                 customSubjects={customSubjects}
+                voices={voices}
               />
             )
           )}
