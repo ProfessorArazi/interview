@@ -188,7 +188,7 @@ export const ApiContextProvider = ({ children }) => {
     return keys;
   };
 
-  const editQuestions = async (data, values, subjectId, setCustomSubjects) => {
+  const editQuestions = async (data, values, subjectId) => {
     const res = await httpRequest({
       method: "post",
       url: "/editQuestions",

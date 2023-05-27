@@ -43,7 +43,6 @@ const AddQuestionsForm = ({
           data,
           values,
           pickedSubjectForEdit,
-          setCustomSubjects
         );
         setCustomSubjects(subjects);
       } else {
