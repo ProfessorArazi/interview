@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "@lottiefiles/lottie-player";
 import { MdArrowForward } from "react-icons/md";
 import "./Login.css";
@@ -16,6 +16,8 @@ const Login = ({
 }) => {
   const { setError, loginOrSignup } = useContext(ApiContext);
 
+  const lottieRef = useRef(null);
+
   const [signup, setSignup] = useState(false);
   const [isLottieLoaded, setIsLottieLoaded] = useState(false);
   const [values, setValues] = useState({
@@ -25,11 +27,18 @@ const Login = ({
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const lottiePlayer = document.querySelector("lottie-player");
-    if (lottiePlayer) {
-      setIsLottieLoaded(true);
+    let timer;
+
+    if (lottieRef.current) {
+      timer = setTimeout(() => {
+        setIsLottieLoaded(true);
+      }, 100);
     }
-  }, []);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [lottieRef]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -61,6 +70,7 @@ const Login = ({
         </button>
       </div>
       <lottie-player
+        ref={lottieRef}
         background="transparent"
         src="https://assets6.lottiefiles.com/private_files/lf30_emntxv1p.json"
         style={
