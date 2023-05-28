@@ -9,6 +9,7 @@ import "./AddQuestionsForm.css";
 import { MdArrowForward } from "react-icons/md";
 import { ApiContext } from "../../store/api-context";
 import { DeleteConfirmation } from "../ui/DeleteConfirmation";
+import LoadingSpinner from "../loading/LoadingSpinner";
 
 const AddQuestionsForm = ({
   closeForm,
@@ -26,6 +27,8 @@ const AddQuestionsForm = ({
   const [community, setCommunity] = useState(false);
   const [pickedSubjectForEdit, setPickedSubjectForEdit] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   let disabled = !values.subject.trim() || !values.questions.trim();
 
   const addQuestionsHandler = async (e) => {
@@ -39,10 +42,11 @@ const AddQuestionsForm = ({
     const data = JSON.parse(localStorage.getItem("data"));
     if (pickedSubjectForEdit) {
       if (data) {
+        setLoading(true);
         const subjects = await editQuestions(
           data,
           values,
-          pickedSubjectForEdit,
+          pickedSubjectForEdit
         );
         setCustomSubjects(subjects);
       } else {
@@ -56,6 +60,7 @@ const AddQuestionsForm = ({
     } else {
       let res = {};
       if (data || community) {
+        setLoading(true);
         res = await addQuestionsRequest(data, values, community);
       }
       const subjects = updateQuestions(
@@ -106,7 +111,9 @@ const AddQuestionsForm = ({
         </button>
       </div>
       <h1 className="title">{customSubjects ? "Edit" : "Custom"} Questions</h1>
-      {customSubjects && !pickedSubjectForEdit ? (
+      {loading ? (
+        <LoadingSpinner />
+      ) : customSubjects && !pickedSubjectForEdit ? (
         <div className="actions">
           {customSubjects.map((custom) => {
             return (
