@@ -108,6 +108,10 @@ const Home = ({
     getCommunityKeys();
   }, [getCommunityKeys]);
 
+  useEffect(() => {
+    window.scroll(0, 0);
+  }, []);
+
   return (
     <>
       <div className="options">
