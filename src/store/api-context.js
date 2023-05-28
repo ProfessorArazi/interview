@@ -184,7 +184,7 @@ export const ApiContextProvider = ({ children }) => {
       },
     });
     setLoading(false);
-    if (keys.message) return somethingWentWrongHandler();
+    if (keys.message) return;
     return keys;
   };
 
