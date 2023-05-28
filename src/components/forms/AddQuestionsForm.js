@@ -85,6 +85,7 @@ const AddQuestionsForm = ({
   const deleteQuestionsHandler = async () => {
     const data = JSON.parse(localStorage.getItem("data"));
     if (data) {
+      setLoading(true);
       const subjects = await editQuestions(
         data,
         null,
