@@ -29,16 +29,19 @@ export const handleSpeak = async (type, speakData) => {
         (voice) =>
           voice.voiceURI === "Microsoft David - English (United States)"
       );
-      utterance.voice = voice;
-      if (!+speed.trim()) {
-        await setSpeed("1");
-        utterance.rate = "1";
-      } else if (+speed.trim() > 2) {
-        await setSpeed("2");
-        utterance.rate = "2";
-      } else utterance.rate = speed || "1";
-      utterance.lang = "en-US";
+      if (voice) {
+        utterance.voice = voice;
+        utterance.lang = "en-US";
+      }
     }
+
+    if (!+speed.trim()) {
+      await setSpeed("1");
+      utterance.rate = "1";
+    } else if (+speed.trim() > 2) {
+      await setSpeed("2");
+      utterance.rate = "2";
+    } else utterance.rate = speed || "1";
     utterance.onend = () => {
       playerRef.current?.stop();
       setDisableButton(false);
