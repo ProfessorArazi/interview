@@ -18,8 +18,47 @@ const Select = ({
   const selectRef = useRef(null);
   const inputRef = useRef(null);
 
+  const [focusedIndex, setFocusedIndex] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+
+  const handleKeyDown = async (event, handleClick) => {
+    const length = filteredSubjects.length + communitySubjects.length;
+    if (event.key === "Enter" && !disabled && handleClick) {
+      await setDisabled(true);
+      await handleClick(event);
+      setTimeout(() => {
+        const focusElement = document.getElementById(`option-${focusedIndex}`);
+        if (focusElement) {
+          focusElement.focus();
+        }
+        setDisabled(false);
+      }, 1);
+    } else if (event.key === "ArrowDown") {
+      event.preventDefault();
+      setFocusedIndex((prevIndex) =>
+        prevIndex < length - 1 ? prevIndex + 1 : prevIndex
+      );
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      if (focusedIndex <= 0) {
+        inputRef.current.focus();
+        setFocusedIndex(-1);
+      } else setFocusedIndex((prevIndex) => prevIndex - 1);
+    }
+  };
+
+  console.log(focusedIndex);
+
+  useEffect(() => {
+    if (focusedIndex >= 0) {
+      const focusElement = document.getElementById(`option-${focusedIndex}`);
+      if (focusElement) {
+        focusElement.focus();
+      }
+    }
+  }, [focusedIndex]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -60,6 +99,7 @@ const Select = ({
             setShowDropdown(true);
           }}
           onChange={searchValueChangeHandler}
+          onKeyDown={handleKeyDown}
           type="text"
           placeholder="Search"
           className={`input-field ${
@@ -78,14 +118,20 @@ const Select = ({
             <div className="select-field">
               {filteredSubjects.length > 0 ? (
                 <div className="filtered-subjects">
-                  {filteredSubjects.map((option) => {
-                    const handleClick = (event) => {
+                  {filteredSubjects.map((option, i) => {
+                    const handleClick = async (event) => {
                       event.stopPropagation();
-                      getCommunity(option._id, setLoading);
+                      await getCommunity(option._id, setLoading);
                     };
 
                     return (
-                      <div key={option._id}>
+                      <div
+                        id={`option-${i}`}
+                        tabIndex={0}
+                        key={option._id}
+                        onFocus={() => setFocusedIndex(i)}
+                        onKeyDown={(e) => handleKeyDown(e, handleClick)}
+                      >
                         {option.subject}
                         {loading === option._id ? (
                           <LoadingSpinner styling={"select-loading"} />
@@ -115,14 +161,22 @@ const Select = ({
                 >
                   {communitySubjects
                     .sort((a, b) => a.subject.localeCompare(b.subject))
-                    .map((option) => {
+                    .map((option, i) => {
                       const handleClick = (event) => {
                         event.stopPropagation();
                         removeCommunity(option._id, setLoading);
                       };
 
                       return (
-                        <div key={option._id}>
+                        <div
+                          id={`option-${i + filteredSubjects.length}`}
+                          tabIndex={0}
+                          key={option._id}
+                          onFocus={() =>
+                            setFocusedIndex(i + filteredSubjects.length)
+                          }
+                          onKeyDown={(e) => handleKeyDown(e, handleClick)}
+                        >
                           {option.subject}
                           {loading === option._id ? (
                             <LoadingSpinner styling={"select-loading"} />
