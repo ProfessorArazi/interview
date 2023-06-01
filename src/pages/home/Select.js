@@ -44,12 +44,9 @@ const Select = ({
       event.preventDefault();
       if (focusedIndex <= 0) {
         inputRef.current.focus();
-        setFocusedIndex(-1);
       } else setFocusedIndex((prevIndex) => prevIndex - 1);
     }
   };
-
-  console.log(focusedIndex);
 
   useEffect(() => {
     if (focusedIndex >= 0) {
@@ -97,9 +94,14 @@ const Select = ({
             if (mobile) setIsKeyboardOpen(true);
             searchValueChangeHandler(e);
             setShowDropdown(true);
+            setFocusedIndex(-1);
           }}
           onChange={searchValueChangeHandler}
-          onKeyDown={handleKeyDown}
+          onKeyDown={(e) => {
+            if (!mobile) {
+              handleKeyDown(e);
+            }
+          }}
           type="text"
           placeholder="Search"
           className={`input-field ${
@@ -130,7 +132,11 @@ const Select = ({
                         tabIndex={0}
                         key={option._id}
                         onFocus={() => setFocusedIndex(i)}
-                        onKeyDown={(e) => handleKeyDown(e, handleClick)}
+                        onKeyDown={(e) => {
+                          if (!mobile) {
+                            handleKeyDown(e, handleClick);
+                          }
+                        }}
                       >
                         {option.subject}
                         {loading === option._id ? (
@@ -175,7 +181,11 @@ const Select = ({
                           onFocus={() =>
                             setFocusedIndex(i + filteredSubjects.length)
                           }
-                          onKeyDown={(e) => handleKeyDown(e, handleClick)}
+                          onKeyDown={(e) => {
+                            if (!mobile) {
+                              handleKeyDown(e, handleClick);
+                            }
+                          }}
                         >
                           {option.subject}
                           {loading === option._id ? (

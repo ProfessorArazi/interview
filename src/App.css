@@ -158,6 +158,10 @@ button::-webkit-scrollbar {
   text-align: left;
 }
 
+.select-field div:focus {
+ background-color: rgb(242, 242, 242);
+}
+
 .select-field svg {
   cursor: pointer;
 }
