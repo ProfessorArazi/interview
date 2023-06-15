@@ -79,10 +79,9 @@ export const askQuestion = (type, communitySubjects, customSubjects) => {
   }
 
   const { questions } = questionsData;
-  let i = Math.floor(Math.random() * questions.length);
-  const question = questions[i];
+  const question = questions[0];
   if (!question) return `No ${questionsData.subject} questions left`;
-  questions.splice(i, 1);
+  questions.splice(0, 1);
   return question;
 };
 
