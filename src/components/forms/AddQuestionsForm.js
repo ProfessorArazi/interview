@@ -48,7 +48,7 @@ const AddQuestionsForm = ({
           values,
           pickedSubjectForEdit
         );
-        setCustomSubjects(subjects);
+        if (subjects) setCustomSubjects(subjects);
       } else {
         const subjects = updateQuestions(
           { questions: values, id: pickedSubjectForEdit },
@@ -92,7 +92,7 @@ const AddQuestionsForm = ({
         pickedSubjectForEdit,
         setCustomSubjects
       );
-      setCustomSubjects(subjects);
+      if (subjects) setCustomSubjects(subjects);
     } else {
       const subjects = deleteQuestion(pickedSubjectForEdit);
       setCustomSubjects(subjects);
@@ -102,15 +102,22 @@ const AddQuestionsForm = ({
 
   return (
     <>
-      <div className="options back">
-        <button
-          onClick={() =>
-            pickedSubjectForEdit ? setPickedSubjectForEdit(false) : closeForm()
-          }
-        >
-          <MdArrowForward size={screenWidth <= 768 ? 24 : 40} color={"#fff"} />
-        </button>
-      </div>
+      {!loading && (
+        <div className="options back">
+          <button
+            onClick={() =>
+              pickedSubjectForEdit
+                ? setPickedSubjectForEdit(false)
+                : closeForm()
+            }
+          >
+            <MdArrowForward
+              size={screenWidth <= 768 ? 24 : 40}
+              color={"#fff"}
+            />
+          </button>
+        </div>
+      )}
       <h1 className="title">{customSubjects ? "Edit" : "Custom"} Questions</h1>
       {loading ? (
         <LoadingSpinner />

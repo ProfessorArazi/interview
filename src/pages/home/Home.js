@@ -74,8 +74,7 @@ const Home = ({
 
   const getCommunityKeys = useCallback(async () => {
     const data = await getCommunityKeysHandler(setLoading);
-    const { subjects } = data;
-    if (subjects) setCommunityKeys(subjects);
+    if (data?.subjects) setCommunityKeys(data.subjects);
   }, [getCommunityKeysHandler, setLoading, setCommunityKeys]);
 
   const searchValueChangeHandler = (e) => {

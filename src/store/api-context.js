@@ -46,11 +46,12 @@ export const ApiContextProvider = ({ children }) => {
         data: user,
       });
       if (!res.questions) {
-        return;
+        setError("Couldn't fetch your questions, please try again later");
+      } else {
+        const { customTypes, communityTypes } = updateQuestions(res, "login");
+        setCustomSubjects(customTypes);
+        setCommunitySubjects(communityTypes);
       }
-      const { customTypes, communityTypes } = updateQuestions(res, "login");
-      setCustomSubjects(customTypes);
-      setCommunitySubjects(communityTypes);
       if (res.isAdmin) {
         setIsAdmin(true);
       } else {
@@ -63,7 +64,7 @@ export const ApiContextProvider = ({ children }) => {
   };
 
   const addQuestionsRequest = async (data, values, community) => {
-    return await httpRequest({
+    const res = await httpRequest({
       method: "post",
       url: "/addQuestions",
       data: {
@@ -72,6 +73,11 @@ export const ApiContextProvider = ({ children }) => {
         community,
       },
     });
+    if (!res.questions)
+      setError(
+        "Something went wrong, the questions were not saved in the database. However, you can still use them locally."
+      );
+    return res;
   };
 
   const loginOrSignup = async (
@@ -200,6 +206,12 @@ export const ApiContextProvider = ({ children }) => {
         subjectId,
       },
     });
+    if (!res.questions) {
+      setError(
+        "Something went wrong, the questions were not saved in the database"
+      );
+      return;
+    }
     const subjects = updateQuestions(
       { questions: res.questions, communityQuestions: res.communityQuestions },
       "login"
