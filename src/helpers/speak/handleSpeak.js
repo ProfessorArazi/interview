@@ -46,8 +46,15 @@ export const handleSpeak = async (type, speakData) => {
       playerRef.current?.stop();
       setDisableButton(false);
     };
+    
+    const speechDuration = (question.split(" ").length) * 1000;
+    
     utterance.onstart = () => {
       playerRef.current?.play();
+      setTimeout(() => {
+        playerRef.current?.stop();
+      }, speechDuration * 0.4);
+      
       setLoading(false);
     };
     synth.speak(utterance);

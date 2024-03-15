@@ -190,7 +190,7 @@ const Home = ({
       </div>
       <div className="zoom">
         <lottie-player
-          speed={speed}
+          speed={0.6}
           ref={playerRef}
           background="transparent"
           loop
